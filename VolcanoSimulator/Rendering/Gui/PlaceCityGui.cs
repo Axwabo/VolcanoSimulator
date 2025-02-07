@@ -8,21 +8,13 @@ public sealed class PlaceCityGui : GuiBase
     private const string Title = "Place city:";
     private static readonly string EmptyBuffer = new(' ', 64);
 
-    private static void Write(ReadOnlySpan<char> text, int row)
-    {
-        if (text.Length == 0)
-            return;
-        Console.SetCursorPosition(Console.WindowWidth - text.Length, row);
-        Console.Out.Write(text);
-    }
-
     private ArraySegment<char> _name = new(new char[64], 0, 0);
 
     private bool _editingName = Console.CursorVisible = true;
 
     public override void Draw()
     {
-        Write(Title, 0);
+        Render.TextRight(0, Title);
         WriteName();
     }
 
@@ -76,11 +68,11 @@ public sealed class PlaceCityGui : GuiBase
         return GuiInputResult.Exit;
     }
 
-    private void ClearName() => Write(EmptyBuffer.AsSpan()[.._name.Count], 1);
+    private void ClearName() => Render.TextRight(1, EmptyBuffer.AsSpan()[.._name.Count]);
 
     private void WriteName()
     {
-        Write(_name, 1);
+        Render.TextRight(1, _name);
         Console.SetCursorPosition(Console.WindowWidth - 1, 1);
     }
 

@@ -8,11 +8,6 @@ namespace VolcanoSimulator.Rendering;
 public sealed class SimulatorRenderer
 {
 
-    private static readonly Coordinates Up = new(-1, 0);
-    private static readonly Coordinates Down = new(1, 0);
-    private static readonly Coordinates Left = new(0, -1);
-    private static readonly Coordinates Right = new(0, 1);
-
     private const string Name = "Name: ";
     private const string People = "People: ";
 
@@ -23,6 +18,8 @@ public sealed class SimulatorRenderer
     public ViewportRect Viewport => new(Console.WindowWidth, Console.WindowHeight, _viewLocation.Longitude, _viewLocation.Latitude);
 
     private GuiBase? _currentGui;
+
+    private LandmarkBase? _selectedLandmark;
 
     public SimulatorRenderer(SimulatorSession session) => Session = session;
 
@@ -35,28 +32,31 @@ public sealed class SimulatorRenderer
     private void Clear()
     {
         var viewport = Viewport;
-        var centerX = viewport.Width / 2;
-        var centerY = viewport.Height / 2;
+        ClearSelectedLandmark(viewport);
         foreach (var landmark in Session.Landmarks)
-        {
             switch (landmark)
             {
                 case City city:
                     new CityRenderer(city).Clear(viewport);
                     break;
             }
-
-            if (!viewport.TryTransform(landmark.Location, out var screen) || screen.Longitude != centerX || screen.Latitude != centerY)
-                break;
-            Console.SetCursorPosition(screen.Longitude - 1, screen.Latitude);
-            Console.Write(' ');
-            Console.SetCursorPosition(screen.Longitude + 1, screen.Latitude);
-            Console.Write(' ');
-            ClearLandmarkInfo(landmark, viewport);
-        }
     }
 
-    private void ClearLandmarkInfo(LandmarkBase landmark, in ViewportRect viewport)
+    private void ClearSelectedLandmark(in ViewportRect viewport)
+    {
+        if (_selectedLandmark == null)
+            return;
+        var centerX = viewport.Width / 2;
+        var centerY = viewport.Height / 2;
+        Console.SetCursorPosition(centerX - 1, centerY);
+        Console.Write(' ');
+        Console.SetCursorPosition(centerX + 1, centerY);
+        Console.Write(' ');
+        ClearLandmarkInfo(_selectedLandmark, viewport);
+        _selectedLandmark = null;
+    }
+
+    private static void ClearLandmarkInfo(LandmarkBase landmark, in ViewportRect viewport)
     {
         if (landmark is City city)
         {
@@ -80,25 +80,28 @@ public sealed class SimulatorRenderer
     private void Draw()
     {
         var viewport = Viewport;
-        var centerX = Console.WindowWidth / 2;
-        var centerY = Console.WindowHeight / 2;
+        var centerX = viewport.Width / 2;
+        var centerY = viewport.Height / 2;
         foreach (var landmark in Session.Landmarks)
         {
             switch (landmark)
             {
                 case City city:
                     new CityRenderer(city).Draw(viewport);
-
                     break;
             }
 
-            if (!viewport.TryTransform(landmark.Location, out var screen) || screen.Longitude != centerX || screen.Latitude != centerY)
-                break;
-            Console.SetCursorPosition(screen.Longitude - 1, screen.Latitude);
+            if (viewport.TryTransform(landmark.Location, out var screen) && screen.Longitude == centerX && screen.Latitude == centerY)
+                _selectedLandmark = landmark;
+        }
+
+        if (_selectedLandmark != null)
+        {
+            Console.SetCursorPosition(centerX - 1, centerY);
             Console.Write('>');
-            Console.SetCursorPosition(screen.Longitude + 1, screen.Latitude);
+            Console.SetCursorPosition(centerX + 1, centerY);
             Console.Write('<');
-            DrawLandmarkInfo(landmark, viewport);
+            DrawLandmarkInfo(_selectedLandmark);
         }
 
         Console.SetCursorPosition(centerX, centerY);
@@ -106,22 +109,12 @@ public sealed class SimulatorRenderer
         _currentGui?.Draw();
     }
 
-    private void DrawLandmarkInfo(LandmarkBase landmark, in ViewportRect viewport)
+    private static void DrawLandmarkInfo(LandmarkBase landmark)
     {
         if (landmark is City city)
-        {
-            Console.SetCursorPosition(viewport.Width - Name.Length - city.Name.Length, 0);
-            Console.Write(Name);
-            Console.Write(city.Name);
-        }
-
+            Render.TextRight(0, Name, city.Name);
         if (landmark is IEvacuationLocation evacuationLocation)
-        {
-            var people = evacuationLocation.AccommodatedPeople.ToString();
-            Console.SetCursorPosition(viewport.Width - People.Length - people.Length, 1);
-            Console.Write(People);
-            Console.Write(people);
-        }
+            Render.TextRight(1, People, evacuationLocation.AccommodatedPeople.ToString());
     }
 
     public void Move(Coordinates delta)
@@ -166,17 +159,9 @@ public sealed class SimulatorRenderer
                 _currentGui = new PlaceCityGui();
                 RedrawAll();
                 break;
-            case ConsoleKey.UpArrow:
-                Move(Up);
-                break;
-            case ConsoleKey.DownArrow:
-                Move(Down);
-                break;
-            case ConsoleKey.LeftArrow:
-                Move(Left);
-                break;
-            case ConsoleKey.RightArrow:
-                Move(Right);
+            default:
+                if (key.Key.TryGetMovementDelta(out var delta))
+                    Move(delta);
                 break;
         }
 
