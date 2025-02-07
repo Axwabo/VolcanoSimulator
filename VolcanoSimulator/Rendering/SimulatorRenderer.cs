@@ -1,15 +1,11 @@
 ﻿using VolcanoSimulator.Models;
 using VolcanoSimulator.Rendering.Gui;
-using VolcanoSimulator.Rendering.Renderers;
 using VolcanoSimulator.Simulation;
 
 namespace VolcanoSimulator.Rendering;
 
 public sealed class SimulatorRenderer
 {
-
-    private const string Name = "Name: ";
-    private const string People = "People: ";
 
     private Coordinates _viewLocation = new(-Console.WindowHeight / 2, -Console.WindowWidth / 2);
 
@@ -33,88 +29,32 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         ClearSelectedLandmark(viewport);
-        foreach (var landmark in Session.Landmarks)
-            switch (landmark)
-            {
-                case City city:
-                    new CityRenderer(city).Clear(viewport);
-                    break;
-            }
+        Session.Landmarks.ClearAll(viewport);
     }
 
     private void ClearSelectedLandmark(in ViewportRect viewport)
     {
         if (_selectedLandmark == null)
             return;
-        var centerX = viewport.Width / 2;
-        var centerY = viewport.Height / 2;
-        Console.SetCursorPosition(centerX - 1, centerY);
-        Console.Write(' ');
-        Console.SetCursorPosition(centerX + 1, centerY);
-        Console.Write(' ');
-        ClearLandmarkInfo(_selectedLandmark, viewport);
+        var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
+        Render.SelectionIndicator(center, false);
+        _selectedLandmark.ClearInfo(viewport);
         _selectedLandmark = null;
     }
-
-    private static void ClearLandmarkInfo(LandmarkBase landmark, in ViewportRect viewport)
-    {
-        if (landmark is City city)
-        {
-            var length = Name.Length + city.Name.Length;
-            Console.SetCursorPosition(viewport.Width - length, 0);
-            for (var i = 0; i < length; i++)
-                Console.Write(' ');
-        }
-
-        if (landmark is IEvacuationLocation evacuationLocation)
-        {
-            var length = People.Length + IntLength(evacuationLocation.AccommodatedPeople);
-            Console.SetCursorPosition(viewport.Width - length, 1);
-            for (var i = 0; i < length; i++)
-                Console.Write(' ');
-        }
-    }
-
-    private static int IntLength(int value) => value == 0 ? 1 : (int) Math.Floor(Math.Log10(value)) + 1;
 
     private void Draw()
     {
         var viewport = Viewport;
-        var centerX = viewport.Width / 2;
-        var centerY = viewport.Height / 2;
-        foreach (var landmark in Session.Landmarks)
+        var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
+        if (Session.Landmarks.DrawAllAndTryGetSelected(viewport, center, out _selectedLandmark))
         {
-            switch (landmark)
-            {
-                case City city:
-                    new CityRenderer(city).Draw(viewport);
-                    break;
-            }
-
-            if (viewport.TryTransform(landmark.Location, out var screen) && screen.Longitude == centerX && screen.Latitude == centerY)
-                _selectedLandmark = landmark;
+            Render.SelectionIndicator(center, true);
+            _selectedLandmark.DrawInfo();
         }
 
-        if (_selectedLandmark != null)
-        {
-            Console.SetCursorPosition(centerX - 1, centerY);
-            Console.Write('>');
-            Console.SetCursorPosition(centerX + 1, centerY);
-            Console.Write('<');
-            DrawLandmarkInfo(_selectedLandmark);
-        }
-
-        Console.SetCursorPosition(centerX, centerY);
+        Render.Cursor = center;
         Console.Write('+');
         _currentGui?.Draw();
-    }
-
-    private static void DrawLandmarkInfo(LandmarkBase landmark)
-    {
-        if (landmark is City city)
-            Render.TextRight(0, Name, city.Name);
-        if (landmark is IEvacuationLocation evacuationLocation)
-            Render.TextRight(1, People, evacuationLocation.AccommodatedPeople.ToString());
     }
 
     public void Move(Coordinates delta)
