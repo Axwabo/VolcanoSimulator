@@ -13,11 +13,11 @@ public sealed class SimulatorRenderer
     private static readonly Coordinates Left = new(0, -1);
     private static readonly Coordinates Right = new(0, 1);
 
-    private Coordinates _viewLocation = new(-Console.BufferHeight / 2, -Console.BufferWidth / 2);
+    private Coordinates _viewLocation = new(-Console.WindowHeight / 2, -Console.WindowWidth / 2);
 
     public SimulatorSession Session { get; }
 
-    private ViewportRect Viewport => new(Console.BufferWidth, Console.BufferHeight, _viewLocation.Longitude, _viewLocation.Latitude);
+    public ViewportRect Viewport => new(Console.WindowWidth, Console.WindowHeight, _viewLocation.Longitude, _viewLocation.Latitude);
 
     private GuiBase? _currentGui;
 
@@ -52,7 +52,7 @@ public sealed class SimulatorRenderer
                     break;
             }
 
-        Console.SetCursorPosition(Console.BufferWidth / 2, Console.BufferHeight / 2);
+        Console.SetCursorPosition(Console.WindowWidth / 2, Console.WindowHeight / 2);
         Console.Write('+');
         _currentGui?.Draw();
     }
@@ -75,10 +75,9 @@ public sealed class SimulatorRenderer
             return true;
         }
 
-        if (_currentGui != null)
+        if (_currentGui != null && _currentGui.ProcessInput(this, key))
         {
-            if (_currentGui.ProcessInput(key))
-                RedrawAll();
+            RedrawAll();
             return true;
         }
 
@@ -86,6 +85,10 @@ public sealed class SimulatorRenderer
         {
             case ConsoleKey.Escape or ConsoleKey.X:
                 return false;
+            case ConsoleKey.C:
+                _currentGui = new PlaceCityGui();
+                RedrawAll();
+                break;
             case ConsoleKey.UpArrow:
                 Move(Up);
                 break;
