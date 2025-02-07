@@ -20,3 +20,4 @@ renderer.RedrawAll();
 while (true)
     if (!renderer.ProcessInput(Console.ReadKey(true)))
         break;
+Console.CursorVisible = true;

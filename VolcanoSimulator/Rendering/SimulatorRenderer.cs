@@ -66,15 +66,8 @@ public sealed class SimulatorRenderer
 
     public bool ProcessInput(in ConsoleKeyInfo key)
     {
-        if (key.Key == ConsoleKey.Escape)
-        {
-            if (_currentGui == null)
-                return false;
-            _currentGui = _currentGui.Parent;
-            RedrawAll();
-            return true;
-        }
-
+        if (key.Key == ConsoleKey.Escape && _currentGui == null)
+            return false;
         if (_currentGui == null)
             return HandleDefaultInput(key);
         var result = _currentGui.ProcessInput(this, key);
