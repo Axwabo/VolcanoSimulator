@@ -7,6 +7,11 @@ namespace VolcanoSimulator.Rendering;
 public sealed class SimulatorRenderer
 {
 
+    private static readonly Coordinates Up = new(-1, 0);
+    private static readonly Coordinates Down = new(1, 0);
+    private static readonly Coordinates Left = new(0, -1);
+    private static readonly Coordinates Right = new(0, 1);
+
     private Coordinates _viewLocation = new(-Console.BufferHeight / 2, -Console.BufferWidth / 2);
 
     public SimulatorSession Session { get; }
@@ -45,7 +50,7 @@ public sealed class SimulatorRenderer
             }
 
         Console.SetCursorPosition(Console.BufferWidth / 2, Console.BufferHeight / 2);
-        Console.Write('.');
+        Console.Write('+');
     }
 
     public void Move(Coordinates delta)
@@ -53,6 +58,29 @@ public sealed class SimulatorRenderer
         Clear();
         _viewLocation = new Coordinates(_viewLocation.Latitude + delta.Latitude, _viewLocation.Longitude + delta.Longitude);
         Draw();
+    }
+
+    public bool ProcessInput(in ConsoleKeyInfo key)
+    {
+        switch (key.Key)
+        {
+            case ConsoleKey.Escape or ConsoleKey.X:
+                return false;
+            case ConsoleKey.UpArrow:
+                Move(Up);
+                break;
+            case ConsoleKey.DownArrow:
+                Move(Down);
+                break;
+            case ConsoleKey.LeftArrow:
+                Move(Left);
+                break;
+            case ConsoleKey.RightArrow:
+                Move(Right);
+                break;
+        }
+
+        return true;
     }
 
 }
