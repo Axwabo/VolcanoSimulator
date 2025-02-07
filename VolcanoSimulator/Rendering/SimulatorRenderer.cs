@@ -28,7 +28,7 @@ public sealed class SimulatorRenderer
     private void Clear()
     {
         var viewport = Viewport;
-        var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
+        var center = viewport.Size / 2;
         Erase.SelectionIndicator(center);
         if (_selectedLandmark != null)
         {
@@ -42,7 +42,7 @@ public sealed class SimulatorRenderer
     private void Draw()
     {
         var viewport = Viewport;
-        var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
+        var center = viewport.Size / 2;
         if (Session.Landmarks.DrawAllAndTryGetSelected(viewport, center, out _selectedLandmark))
         {
             Render.SelectionIndicator(center);
@@ -60,7 +60,7 @@ public sealed class SimulatorRenderer
     public void Move(Coordinates delta)
     {
         Clear();
-        _viewLocation = new Coordinates(_viewLocation.Latitude + delta.Latitude, _viewLocation.Longitude + delta.Longitude);
+        _viewLocation += delta;
         Draw();
     }
 
@@ -96,18 +96,35 @@ public sealed class SimulatorRenderer
             case ConsoleKey.Escape or ConsoleKey.X:
                 return false;
             case ConsoleKey.C:
-                _currentGui = new PlaceCityGui();
-                RedrawAll();
+                ShowGui(new PlaceCityGui());
+                break;
+            case ConsoleKey.Delete:
+                if (_selectedLandmark == null)
+                    break;
+                var center = Viewport.Size / 2;
+                Erase.SelectionIndicator(center);
+                _selectedLandmark.ClearInfo();
+                Session.Landmarks.Remove(_selectedLandmark);
+                Render.Cursor = center;
+                Console.Write('+');
                 break;
             default:
                 if (key.Key.TryGetMovementDelta(out var delta))
-                    Move(key.IsShift()
-                        ? new Coordinates(delta.Latitude * 10, delta.Longitude * 10)
-                        : delta);
+                    Move(key.IsShift() ? delta * 10 : delta);
                 break;
         }
 
         return true;
+    }
+
+    private void ShowGui(PlaceCityGui gui)
+    {
+        var current = _currentGui;
+        _currentGui = gui;
+        if (current != null)
+            RedrawAll();
+        else
+            gui.Draw();
     }
 
 }

@@ -28,7 +28,7 @@ public sealed class PlaceCityGui : GuiBase
         }
 
         if (!_editingName)
-            return GuiInputResult.Passthrough;
+            return key.Key.TryGetMovementDelta(out _) ? GuiInputResult.Passthrough : GuiInputResult.None;
         if (key.Key != ConsoleKey.Backspace)
         {
             if (_name.Count == _name.Array!.Length)
