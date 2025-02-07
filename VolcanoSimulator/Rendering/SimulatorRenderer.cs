@@ -28,18 +28,15 @@ public sealed class SimulatorRenderer
     private void Clear()
     {
         var viewport = Viewport;
-        ClearSelectedLandmark(viewport);
-        Session.Landmarks.ClearAll(viewport);
-    }
-
-    private void ClearSelectedLandmark(in ViewportRect viewport)
-    {
-        if (_selectedLandmark == null)
-            return;
         var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
-        Render.SelectionIndicator(center, false);
-        _selectedLandmark.ClearInfo(viewport);
-        _selectedLandmark = null;
+        Erase.SelectionIndicator(center);
+        if (_selectedLandmark != null)
+        {
+            _selectedLandmark.ClearInfo();
+            _selectedLandmark = null;
+        }
+
+        Session.Landmarks.ClearAll(viewport);
     }
 
     private void Draw()
@@ -48,12 +45,15 @@ public sealed class SimulatorRenderer
         var center = new Coordinates(viewport.Height / 2, viewport.Width / 2);
         if (Session.Landmarks.DrawAllAndTryGetSelected(viewport, center, out _selectedLandmark))
         {
-            Render.SelectionIndicator(center, true);
+            Render.SelectionIndicator(center);
             _selectedLandmark.DrawInfo();
         }
+        else
+        {
+            Render.Cursor = center;
+            Console.Write('+');
+        }
 
-        Render.Cursor = center;
-        Console.Write('+');
         _currentGui?.Draw();
     }
 

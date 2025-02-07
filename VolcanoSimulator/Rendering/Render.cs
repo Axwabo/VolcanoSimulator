@@ -28,13 +28,13 @@ public static class Render
         Console.Out.Write(text2);
     }
 
-    public static void SelectionIndicator(Coordinates coordinates, bool active)
+    public static void SelectionIndicator(Coordinates coordinates)
     {
         Cursor = coordinates;
         Console.CursorLeft--;
-        Console.Write(active ? '>' : ' ');
-        Console.CursorLeft += 2;
-        Console.Write(active ? '<' : ' ');
+        Console.Write('>');
+        Console.CursorLeft++;
+        Console.Write('<');
     }
 
 }

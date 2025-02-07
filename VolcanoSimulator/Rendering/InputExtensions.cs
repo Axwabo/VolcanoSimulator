@@ -32,4 +32,8 @@ public static class InputExtensions
         }
     }
 
+    public static bool IsControl(this ConsoleModifiers modifiers) => modifiers.HasFlagFast(ConsoleModifiers.Control);
+
+    public static bool HasFlagFast(this ConsoleModifiers modifiers, ConsoleModifiers match) => (modifiers & match) != 0;
+
 }

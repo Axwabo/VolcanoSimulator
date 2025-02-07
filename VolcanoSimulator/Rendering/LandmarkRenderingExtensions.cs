@@ -39,30 +39,19 @@ public static class LandmarkRenderingExtensions
                     break;
             }
 
-            if (viewport.TryTransform(landmark.Location, out var screen) && screen != center)
+            if (viewport.TryTransform(landmark.Location, out var screen) && screen == center)
                 selected = landmark;
         }
 
         return selected is not null;
     }
 
-    public static void ClearInfo(this LandmarkBase landmark, in ViewportRect viewport)
+    public static void ClearInfo(this LandmarkBase landmark)
     {
         if (landmark is City city)
-        {
-            var length = Name.Length + city.Name.Length;
-            Console.SetCursorPosition(viewport.Width - length, 0);
-            for (var i = 0; i < length; i++)
-                Console.Write(' ');
-        }
-
+            Erase.TextRight(0, Name.Length + city.Name.Length);
         if (landmark is IEvacuationLocation evacuationLocation)
-        {
-            var length = People.Length + IntLength(evacuationLocation.AccommodatedPeople);
-            Console.SetCursorPosition(viewport.Width - length, 1);
-            for (var i = 0; i < length; i++)
-                Console.Write(' ');
-        }
+            Erase.TextRight(1, People.Length + IntLength(evacuationLocation.AccommodatedPeople));
     }
 
     public static void DrawInfo(this LandmarkBase landmark)

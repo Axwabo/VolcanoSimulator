@@ -6,7 +6,6 @@ public sealed class PlaceCityGui : GuiBase
 {
 
     private const string Title = "Place city:";
-    private static readonly string EmptyBuffer = new(' ', 64);
 
     private ArraySegment<char> _name = new(new char[64], 0, 0);
 
@@ -44,7 +43,7 @@ public sealed class PlaceCityGui : GuiBase
         if (_name.Count == 0)
             return GuiInputResult.None;
         Console.SetCursorPosition(Console.WindowWidth - _name.Count, 1);
-        Console.WriteLine(' ');
+        Console.Write(' ');
         _name = _name[..^1];
         WriteName();
         return GuiInputResult.None;
@@ -52,7 +51,7 @@ public sealed class PlaceCityGui : GuiBase
 
     private GuiInputResult ToggleNameField(SimulatorRenderer renderer, in ConsoleKeyInfo key)
     {
-        if (_name.AsSpan().IsEmpty || (key.Modifiers & ConsoleModifiers.Control) == 0)
+        if (_name.AsSpan().IsEmpty || !key.Modifiers.IsControl())
         {
             Console.CursorVisible = _editingName = !_editingName;
             return GuiInputResult.None;
@@ -68,7 +67,7 @@ public sealed class PlaceCityGui : GuiBase
         return GuiInputResult.Exit;
     }
 
-    private void ClearName() => Render.TextRight(1, EmptyBuffer.AsSpan()[.._name.Count]);
+    private void ClearName() => Erase.TextRight(1, _name.Count);
 
     private void WriteName()
     {
