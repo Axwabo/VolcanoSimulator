@@ -17,7 +17,7 @@ public static class LandmarkRenderingExtensions
             switch (landmark)
             {
                 case City city:
-                    new CityRenderer(city).Clear(viewport);
+                    CityRenderer.Clear(city, viewport);
                     break;
             }
     }
@@ -35,7 +35,7 @@ public static class LandmarkRenderingExtensions
             switch (landmark)
             {
                 case City city:
-                    new CityRenderer(city).Draw(viewport);
+                    CityRenderer.Draw(city, viewport);
                     break;
             }
 
