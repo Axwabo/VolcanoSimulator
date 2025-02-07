@@ -1,4 +1,5 @@
 ﻿using VolcanoSimulator.Models;
+using VolcanoSimulator.Rendering.Gui;
 using VolcanoSimulator.Rendering.Renderers;
 using VolcanoSimulator.Simulation;
 
@@ -17,6 +18,8 @@ public sealed class SimulatorRenderer
     public SimulatorSession Session { get; }
 
     private ViewportRect Viewport => new(Console.BufferWidth, Console.BufferHeight, _viewLocation.Longitude, _viewLocation.Latitude);
+
+    private GuiBase? _currentGui;
 
     public SimulatorRenderer(SimulatorSession session) => Session = session;
 
@@ -51,6 +54,7 @@ public sealed class SimulatorRenderer
 
         Console.SetCursorPosition(Console.BufferWidth / 2, Console.BufferHeight / 2);
         Console.Write('+');
+        _currentGui?.Draw();
     }
 
     public void Move(Coordinates delta)
@@ -62,6 +66,22 @@ public sealed class SimulatorRenderer
 
     public bool ProcessInput(in ConsoleKeyInfo key)
     {
+        if (key.Key == ConsoleKey.Escape)
+        {
+            if (_currentGui == null)
+                return false;
+            _currentGui = _currentGui.Parent;
+            RedrawAll();
+            return true;
+        }
+
+        if (_currentGui != null)
+        {
+            if (_currentGui.ProcessInput(key))
+                RedrawAll();
+            return true;
+        }
+
         switch (key.Key)
         {
             case ConsoleKey.Escape or ConsoleKey.X:
