@@ -23,11 +23,9 @@ public readonly record struct CityRenderer : IRenderer
 
     private bool SetPosition(in ViewportRect viewport)
     {
-        var x = _city.Location.Longitude - viewport.X;
-        var y = _city.Location.Latitude - viewport.Y;
-        if (x < 0 || x >= viewport.Width || y < 0 || y >= viewport.Height)
+        if (!viewport.TryTransform(_city.Location, out var screen))
             return false;
-        Console.SetCursorPosition(x, y);
+        Console.SetCursorPosition(screen.Longitude, screen.Latitude);
         return true;
     }
 

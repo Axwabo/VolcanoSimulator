@@ -7,11 +7,11 @@ namespace VolcanoSimulator.Rendering;
 public sealed class SimulatorRenderer
 {
 
-    private Coordinates _viewLocation = new(-Console.WindowHeight / 2, -Console.WindowWidth / 2);
+    private Coordinates _viewLocation = new(-Console.BufferHeight / 2, -Console.BufferWidth / 2);
 
     public SimulatorSession Session { get; }
 
-    private ViewportRect Viewport => new(Console.WindowWidth, Console.WindowHeight, _viewLocation.Longitude, _viewLocation.Latitude);
+    private ViewportRect Viewport => new(Console.BufferWidth, Console.BufferHeight, _viewLocation.Longitude, _viewLocation.Latitude);
 
     public SimulatorRenderer(SimulatorSession session) => Session = session;
 
@@ -25,14 +25,27 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         foreach (var landmark in Session.Landmarks)
-            IRenderer.GetRenderable(landmark).Clear(viewport);
+            switch (landmark)
+            {
+                case City city:
+                    new CityRenderer(city).Clear(viewport);
+                    break;
+            }
     }
 
     private void Draw()
     {
         var viewport = Viewport;
         foreach (var landmark in Session.Landmarks)
-            IRenderer.GetRenderable(landmark).Draw(viewport);
+            switch (landmark)
+            {
+                case City city:
+                    new CityRenderer(city).Draw(viewport);
+                    break;
+            }
+
+        Console.SetCursorPosition(Console.BufferWidth / 2, Console.BufferHeight / 2);
+        Console.Write('.');
     }
 
     public void Move(Coordinates delta)
