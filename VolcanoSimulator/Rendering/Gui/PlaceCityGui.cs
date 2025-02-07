@@ -51,7 +51,7 @@ public sealed class PlaceCityGui : GuiBase
 
     private GuiInputResult ToggleNameField(SimulatorRenderer renderer, in ConsoleKeyInfo key)
     {
-        if (_name.AsSpan().IsEmpty || !key.Modifiers.IsControl())
+        if (_name.AsSpan().IsEmpty || !key.IsControl())
         {
             Console.CursorVisible = _editingName = !_editingName;
             return GuiInputResult.None;

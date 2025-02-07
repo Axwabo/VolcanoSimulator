@@ -101,7 +101,9 @@ public sealed class SimulatorRenderer
                 break;
             default:
                 if (key.Key.TryGetMovementDelta(out var delta))
-                    Move(delta);
+                    Move(key.IsShift()
+                        ? new Coordinates(delta.Latitude * 10, delta.Longitude * 10)
+                        : delta);
                 break;
         }
 
