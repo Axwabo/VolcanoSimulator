@@ -75,12 +75,29 @@ public sealed class SimulatorRenderer
             return true;
         }
 
-        if (_currentGui != null && _currentGui.ProcessInput(this, key))
+        if (_currentGui == null)
+            return HandleDefaultInput(key);
+        var result = _currentGui.ProcessInput(this, key);
+        switch (result)
         {
-            RedrawAll();
-            return true;
+            case GuiInputResult.None:
+                return true;
+            case GuiInputResult.FullRedraw:
+                RedrawAll();
+                return true;
+            case GuiInputResult.Passthrough:
+                return HandleDefaultInput(key);
+            case GuiInputResult.Exit:
+                _currentGui = _currentGui.Parent;
+                RedrawAll();
+                return true;
+            default:
+                return HandleDefaultInput(key);
         }
+    }
 
+    private bool HandleDefaultInput(in ConsoleKeyInfo key)
+    {
         switch (key.Key)
         {
             case ConsoleKey.Escape or ConsoleKey.X:

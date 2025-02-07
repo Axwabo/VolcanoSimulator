@@ -7,6 +7,6 @@ public abstract class GuiBase
 
     public abstract void Draw();
 
-    public abstract bool ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key);
+    public abstract GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key);
 
 }

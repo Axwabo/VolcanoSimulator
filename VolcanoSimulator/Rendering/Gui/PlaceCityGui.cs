@@ -17,7 +17,7 @@ public sealed class PlaceCityGui : GuiBase
 
     private string _name = "";
 
-    private bool _editingName;
+    private bool _editingName = Console.CursorVisible = true;
 
     public override void Draw()
     {
@@ -26,7 +26,7 @@ public sealed class PlaceCityGui : GuiBase
         Console.SetCursorPosition(Console.WindowWidth - 1, 1);
     }
 
-    public override bool ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
+    public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
     {
         if (key.Key == ConsoleKey.Enter)
         {
@@ -38,25 +38,42 @@ public sealed class PlaceCityGui : GuiBase
                     Location = new Coordinates(viewport.Y + viewport.Height / 2, viewport.X + viewport.Width / 2),
                     Name = _name
                 });
-                return false;
+                Console.CursorVisible = false;
+                return GuiInputResult.Exit;
             }
 
             Console.CursorVisible = _editingName = !_editingName;
-            return true;
+            return GuiInputResult.None;
         }
 
         if (!_editingName)
-            return false;
+            return GuiInputResult.Passthrough;
         if (key.Key != ConsoleKey.Backspace)
         {
+            ClearName();
             _name += key.KeyChar;
-            return true;
+            Write(_name, 1);
+            Console.SetCursorPosition(Console.WindowWidth - 1, 1);
+            return GuiInputResult.None;
         }
 
         if (_name.Length == 0)
-            return false;
+            return GuiInputResult.None;
+        Console.SetCursorPosition(Console.WindowWidth - _name.Length, 1);
+        Console.WriteLine(' ');
         _name = _name[..^1];
-        return true;
+        Write(_name, 1);
+        Console.SetCursorPosition(Console.WindowWidth - 1, 1);
+        return GuiInputResult.None;
+    }
+
+    private void ClearName()
+    {
+        if (_name.Length == 0)
+            return;
+        Console.SetCursorPosition(Console.WindowWidth - _name.Length, 1);
+        for (var i = 0; i < _name.Length; i++)
+            Console.Write(' ');
     }
 
 }
