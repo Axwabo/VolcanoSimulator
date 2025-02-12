@@ -18,10 +18,11 @@ public class InputField
         _buffer = ArrayPool<char>.Shared.Rent(maxLength);
     }
 
-    public void Draw()
+    public void Draw(bool active)
     {
         Render.TextRight(_row, Text);
-        Console.SetCursorPosition(Console.WindowWidth - 1, _row);
+        if (active)
+            Console.SetCursorPosition(Console.WindowWidth - 1, _row);
     }
 
     public GuiInputResult ProcessInput(in ConsoleKeyInfo key)
