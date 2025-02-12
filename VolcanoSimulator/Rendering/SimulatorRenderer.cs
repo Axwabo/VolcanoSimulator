@@ -43,7 +43,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        if (Session.Landmarks.DrawAllAndTryGetSelected(viewport, center, out _selectedLandmark))
+        if (_currentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(viewport, center, out _selectedLandmark))
         {
             Render.SelectionIndicator(center);
             _selectedLandmark.DrawInfo();
@@ -52,9 +52,8 @@ public sealed class SimulatorRenderer
         {
             Render.Cursor = center;
             Console.Write('+');
+            _currentGui?.Draw();
         }
-
-        _currentGui?.Draw();
     }
 
     public void Move(Coordinates delta)
@@ -95,7 +94,7 @@ public sealed class SimulatorRenderer
         {
             case ConsoleKey.Escape or ConsoleKey.X:
                 return false;
-            case ConsoleKey.C:
+            case ConsoleKey.C when _selectedLandmark == null:
                 ShowGui(new PlaceCityGui());
                 break;
             case ConsoleKey.Delete:
@@ -122,9 +121,13 @@ public sealed class SimulatorRenderer
         var current = _currentGui;
         _currentGui = gui;
         if (current != null)
+        {
             RedrawAll();
-        else
-            gui.Draw();
+            return;
+        }
+
+        _selectedLandmark?.ClearInfo();
+        gui.Draw();
     }
 
 }
