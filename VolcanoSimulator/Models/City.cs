@@ -1,9 +1,7 @@
 ﻿namespace VolcanoSimulator.Models;
 
-public sealed class City : LandmarkBase, IEvacuationLocation
+public sealed class City : NamedLandmark, IEvacuationLocation
 {
-
-    public required string Name { get; set; }
 
     public int AccommodatedPeople { get; private set; }
 

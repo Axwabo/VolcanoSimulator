@@ -52,8 +52,8 @@ public static class LandmarkRenderingExtensions
 
     public static void ClearInfo(this LandmarkBase landmark)
     {
-        if (landmark is City city)
-            Erase.TextRight(0, Name.Length + city.Name.Length);
+        if (landmark is NamedLandmark named)
+            Erase.TextRight(0, Name.Length + named.Name.Length);
         else
             Erase.TextRight(0, landmark.GetType().Name.Length);
         if (landmark is IEvacuationLocation evacuationLocation)
@@ -62,8 +62,8 @@ public static class LandmarkRenderingExtensions
 
     public static void DrawInfo(this LandmarkBase landmark)
     {
-        if (landmark is City city)
-            Render.TextRight(0, Name, city.Name);
+        if (landmark is NamedLandmark named)
+            Render.TextRight(0, Name, named.Name);
         else
             Render.TextRight(0, landmark.GetType().Name);
         if (landmark is IEvacuationLocation evacuationLocation)
