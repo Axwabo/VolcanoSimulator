@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Rendering.Gui;
+﻿namespace VolcanoSimulator.Rendering.Gui.Inputs;
 
 public class IntInputField : InputField
 {

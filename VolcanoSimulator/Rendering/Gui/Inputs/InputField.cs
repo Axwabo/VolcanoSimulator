@@ -1,31 +1,28 @@
 ﻿using System.Buffers;
 
-namespace VolcanoSimulator.Rendering.Gui;
+namespace VolcanoSimulator.Rendering.Gui.Inputs;
 
-public class InputField
+public class InputField : IInputField
 {
 
-    private readonly int _row;
     private readonly char[] _buffer;
-
+    public int Row { get; }
     public int MaxLength { get; }
-
     public int Length { get; private set; }
-
     public Span<char> Text => _buffer.AsSpan()[..Length];
 
     public InputField(int row, int maxLength)
     {
-        _row = row;
+        Row = row;
         _buffer = ArrayPool<char>.Shared.Rent(maxLength);
         MaxLength = maxLength;
     }
 
     public void Draw(bool active)
     {
-        Render.TextRight(_row, Text);
+        Render.TextRight(Row, Text);
         if (active)
-            Console.SetCursorPosition(Console.WindowWidth - 1, _row);
+            Console.SetCursorPosition(Console.WindowWidth - 1, Row);
     }
 
     public GuiInputResult ProcessInput(in ConsoleKeyInfo key)
@@ -44,7 +41,7 @@ public class InputField
 
         if (Length == 0)
             return GuiInputResult.None;
-        Console.SetCursorPosition(Console.WindowWidth - Length--, _row);
+        Console.SetCursorPosition(Console.WindowWidth - Length--, Row);
         Console.Write(' ');
         Write();
         return GuiInputResult.None;
@@ -54,12 +51,12 @@ public class InputField
 
     protected virtual bool IsAllowed(char character) => true;
 
-    private void Clear() => Erase.TextRight(_row, Length);
+    private void Clear() => Erase.TextRight(Row, Length);
 
     private void Write()
     {
-        Render.TextRight(_row, Text);
-        Console.SetCursorPosition(Console.WindowWidth - 1, _row);
+        Render.TextRight(Row, Text);
+        Console.SetCursorPosition(Console.WindowWidth - 1, Row);
     }
 
     ~InputField() => ArrayPool<char>.Shared.Return(_buffer);
