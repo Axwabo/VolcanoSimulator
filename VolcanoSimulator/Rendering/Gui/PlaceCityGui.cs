@@ -8,7 +8,7 @@ public sealed class PlaceCityGui : GuiBase
     private const string Title = "Place city:";
 
     private readonly InputField _nameInput = new(1, 64);
-    private readonly IntInputField _peopleInput = new(2, 10);
+    private readonly IntInputField _peopleInput = new(2, 8);
 
     private bool _peopleActive;
 

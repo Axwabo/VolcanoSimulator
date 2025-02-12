@@ -8,6 +8,8 @@ public class InputField
     private readonly int _row;
     private readonly char[] _buffer;
 
+    public int MaxLength { get; }
+
     public int Length { get; private set; }
 
     public Span<char> Text => _buffer.AsSpan()[..Length];
@@ -16,6 +18,7 @@ public class InputField
     {
         _row = row;
         _buffer = ArrayPool<char>.Shared.Rent(maxLength);
+        MaxLength = maxLength;
     }
 
     public void Draw(bool active)
@@ -31,7 +34,7 @@ public class InputField
             return GuiInputResult.Exit;
         if (key.Key != ConsoleKey.Backspace)
         {
-            if (Length == _buffer.Length || !IsAllowed(key.KeyChar))
+            if (Length == MaxLength || !IsAllowed(key.KeyChar))
                 return GuiInputResult.None;
             Clear();
             Append(key.KeyChar);
