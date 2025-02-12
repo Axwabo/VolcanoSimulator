@@ -2,7 +2,7 @@
 
 namespace VolcanoSimulator.Rendering.Gui;
 
-public sealed class InputField
+public class InputField
 {
 
     private readonly int _row;
@@ -30,10 +30,10 @@ public sealed class InputField
             return GuiInputResult.Exit;
         if (key.Key != ConsoleKey.Backspace)
         {
-            if (Length == _buffer.Length)
+            if (Length == _buffer.Length || !IsAllowed(key.KeyChar))
                 return GuiInputResult.None;
             Clear();
-            _buffer[Length++] = key.KeyChar;
+            Append(key.KeyChar);
             Write();
             return GuiInputResult.None;
         }
@@ -45,6 +45,10 @@ public sealed class InputField
         Write();
         return GuiInputResult.None;
     }
+
+    protected void Append(char character) => _buffer[Length++] = character;
+
+    protected virtual bool IsAllowed(char character) => true;
 
     private void Clear() => Erase.TextRight(_row, Length);
 
