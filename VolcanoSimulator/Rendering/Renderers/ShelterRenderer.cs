@@ -2,27 +2,23 @@
 
 namespace VolcanoSimulator.Rendering.Renderers;
 
-public struct ShelterRenderer
+public sealed class ShelterRenderer : LandmarkRenderer
 {
 
-    public static void Draw(EvacuationShelter target, in ViewportRect viewport)
+    public ShelterRenderer(EvacuationShelter landmark) : base(landmark)
     {
-        if (SetPosition(viewport, target))
+    }
+
+    public override void Draw(in ViewportRect viewport)
+    {
+        if (SetPosition(viewport))
             Console.Write('E');
     }
 
-    public static void Clear(EvacuationShelter target, in ViewportRect viewport)
+    public override void Clear(in ViewportRect viewport)
     {
-        if (SetPosition(viewport, target))
+        if (SetPosition(viewport))
             Console.Write(' ');
-    }
-
-    private static bool SetPosition(in ViewportRect viewport, EvacuationShelter city)
-    {
-        if (!viewport.TryTransform(city.Location, out var screen))
-            return false;
-        Render.Cursor = screen;
-        return true;
     }
 
 }

@@ -2,27 +2,23 @@
 
 namespace VolcanoSimulator.Rendering.Renderers;
 
-public struct CityRenderer
+public sealed class CityRenderer : LandmarkRenderer
 {
 
-    public static void Draw(City target, in ViewportRect viewport)
+    public CityRenderer(City landmark) : base(landmark)
     {
-        if (SetPosition(viewport, target))
+    }
+
+    public override void Draw(in ViewportRect viewport)
+    {
+        if (SetPosition(viewport))
             Console.Write('C');
     }
 
-    public static void Clear(City target, in ViewportRect viewport)
+    public override void Clear(in ViewportRect viewport)
     {
-        if (SetPosition(viewport, target))
+        if (SetPosition(viewport))
             Console.Write(' ');
-    }
-
-    private static bool SetPosition(in ViewportRect viewport, City city)
-    {
-        if (!viewport.TryTransform(city.Location, out var screen))
-            return false;
-        Render.Cursor = screen;
-        return true;
     }
 
 }

@@ -11,22 +11,29 @@ public static class LandmarkRenderingExtensions
 
     public const string People = "People: ";
 
-    public static void ClearAll(this IEnumerable<LandmarkBase> landmarks, in ViewportRect viewport)
+    public static LandmarkRenderer GetRenderer(this RendererTable renderers, LandmarkBase landmark)
+    {
+        if (renderers.TryGetValue(landmark, out var renderer) && renderer != null)
+            return renderer;
+        renderer = landmark switch
+        {
+            City city => new CityRenderer(city),
+            EvacuationShelter evacuationShelter => new ShelterRenderer(evacuationShelter),
+            _ => throw new NotSupportedException($"Cannot create a renderer for {landmark.GetType().FullName}")
+        };
+        renderers.Add(landmark, renderer);
+        return renderer;
+    }
+
+    public static void ClearAll(this IEnumerable<LandmarkBase> landmarks, RendererTable table, in ViewportRect viewport)
     {
         foreach (var landmark in landmarks)
-            switch (landmark)
-            {
-                case City city:
-                    CityRenderer.Clear(city, viewport);
-                    break;
-                case EvacuationShelter shelter:
-                    ShelterRenderer.Clear(shelter, viewport);
-                    break;
-            }
+            table.GetRenderer(landmark).Clear(viewport);
     }
 
     public static bool DrawAllAndTryGetSelected(
         this IEnumerable<LandmarkBase> landmarks,
+        RendererTable table,
         in ViewportRect viewport,
         Coordinates center,
         [NotNullWhen(true)] out LandmarkBase? selected
@@ -35,16 +42,7 @@ public static class LandmarkRenderingExtensions
         selected = null;
         foreach (var landmark in landmarks)
         {
-            switch (landmark)
-            {
-                case City city:
-                    CityRenderer.Draw(city, viewport);
-                    break;
-                case EvacuationShelter shelter:
-                    ShelterRenderer.Draw(shelter, viewport);
-                    break;
-            }
-
+            table.GetRenderer(landmark).Draw(viewport);
             if (viewport.TryTransform(landmark.Location, out var screen) && screen == center)
                 selected = landmark;
         }
