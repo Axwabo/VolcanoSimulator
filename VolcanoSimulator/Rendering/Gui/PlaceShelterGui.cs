@@ -10,8 +10,6 @@ public sealed class PlaceShelterGui : GuiBase
 
     private readonly PrefixedInput<IntInputField> _capacity = new(new IntInputField(1, 8), "Capacity: ");
 
-    private bool _peopleActive;
-
     public override void Draw()
     {
         Console.CursorVisible = true;
@@ -25,13 +23,6 @@ public sealed class PlaceShelterGui : GuiBase
         {
             Console.CursorVisible = false;
             return GuiInputResult.Exit;
-        }
-
-        if (key.Key is ConsoleKey.UpArrow or ConsoleKey.DownArrow)
-        {
-            _peopleActive = !_peopleActive;
-            Console.SetCursorPosition(Console.WindowWidth - 1, _peopleActive ? 2 : 1);
-            return GuiInputResult.None;
         }
 
         var result = _capacity.ProcessInput(key);
