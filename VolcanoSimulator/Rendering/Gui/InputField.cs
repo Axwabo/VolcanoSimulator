@@ -20,8 +20,8 @@ public class InputField
 
     public void Draw()
     {
-        Render.TextRight(1, Text);
-        Console.SetCursorPosition(Console.WindowWidth - 1, 1);
+        Render.TextRight(_row, Text);
+        Console.SetCursorPosition(Console.WindowWidth - 1, _row);
     }
 
     public GuiInputResult ProcessInput(in ConsoleKeyInfo key)
@@ -40,7 +40,7 @@ public class InputField
 
         if (Length == 0)
             return GuiInputResult.None;
-        Console.SetCursorPosition(Console.WindowWidth - Length--, 1);
+        Console.SetCursorPosition(Console.WindowWidth - Length--, _row);
         Console.Write(' ');
         Write();
         return GuiInputResult.None;
@@ -54,8 +54,8 @@ public class InputField
 
     private void Write()
     {
-        Render.TextRight(1, Text);
-        Console.SetCursorPosition(Console.WindowWidth - 1, 1);
+        Render.TextRight(_row, Text);
+        Console.SetCursorPosition(Console.WindowWidth - 1, _row);
     }
 
     ~InputField() => ArrayPool<char>.Shared.Return(_buffer);
