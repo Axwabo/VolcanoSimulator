@@ -19,6 +19,9 @@ public static class LandmarkRenderingExtensions
                 case City city:
                     CityRenderer.Clear(city, viewport);
                     break;
+                case EvacuationShelter shelter:
+                    ShelterRenderer.Clear(shelter, viewport);
+                    break;
             }
     }
 
@@ -37,6 +40,9 @@ public static class LandmarkRenderingExtensions
                 case City city:
                     CityRenderer.Draw(city, viewport);
                     break;
+                case EvacuationShelter shelter:
+                    ShelterRenderer.Draw(shelter, viewport);
+                    break;
             }
 
             if (viewport.TryTransform(landmark.Location, out var screen) && screen == center)
@@ -50,6 +56,8 @@ public static class LandmarkRenderingExtensions
     {
         if (landmark is City city)
             Erase.TextRight(0, Name.Length + city.Name.Length);
+        else
+            Erase.TextRight(0, landmark.GetType().Name.Length);
         if (landmark is IEvacuationLocation evacuationLocation)
             Erase.TextRight(1, People.Length + IntLength(evacuationLocation.AccommodatedPeople));
     }
@@ -58,6 +66,8 @@ public static class LandmarkRenderingExtensions
     {
         if (landmark is City city)
             Render.TextRight(0, Name, city.Name);
+        else
+            Render.TextRight(0, landmark.GetType().Name);
         if (landmark is IEvacuationLocation evacuationLocation)
             Render.TextRight(1, People, evacuationLocation.AccommodatedPeople.ToString());
     }

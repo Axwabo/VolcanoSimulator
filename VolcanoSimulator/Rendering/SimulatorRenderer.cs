@@ -97,6 +97,9 @@ public sealed class SimulatorRenderer
             case ConsoleKey.C when _selectedLandmark == null:
                 ShowGui(new PlaceCityGui());
                 break;
+            case ConsoleKey.E when _selectedLandmark == null:
+                ShowGui(new PlaceShelterGui());
+                break;
             case ConsoleKey.Delete:
                 if (_selectedLandmark == null)
                     break;
@@ -116,7 +119,7 @@ public sealed class SimulatorRenderer
         return true;
     }
 
-    private void ShowGui(PlaceCityGui gui)
+    private void ShowGui(GuiBase gui)
     {
         var current = _currentGui;
         _currentGui = gui;
