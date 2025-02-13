@@ -102,6 +102,9 @@ public sealed class SimulatorRenderer
             case ConsoleKey.E when _selectedLandmark == null:
                 ShowGui(new PlaceShelterGui());
                 break;
+            case ConsoleKey.V when _selectedLandmark == null:
+                ShowGui(new PlaceVolcanoGui());
+                break;
             case ConsoleKey.Delete:
                 if (_selectedLandmark == null)
                     break;

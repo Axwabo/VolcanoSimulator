@@ -2,23 +2,11 @@
 
 namespace VolcanoSimulator.Rendering.Renderers;
 
-public sealed class ShelterRenderer : LandmarkRenderer
+public sealed class ShelterRenderer : SymbolBasedRenderer
 {
 
-    public ShelterRenderer(EvacuationShelter landmark) : base(landmark)
+    public ShelterRenderer(EvacuationShelter landmark) : base(landmark, 'E')
     {
-    }
-
-    public override void Draw(in ViewportRect viewport)
-    {
-        if (SetPosition(viewport))
-            Console.Write('E');
-    }
-
-    public override void Clear(in ViewportRect viewport)
-    {
-        if (SetPosition(viewport))
-            Console.Write(' ');
     }
 
 }

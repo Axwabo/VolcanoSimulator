@@ -18,6 +18,7 @@ public static class LandmarkRenderingExtensions
         renderer = landmark switch
         {
             City city => new CityRenderer(city),
+            Volcano volcano => new VolcanoRenderer(volcano),
             EvacuationShelter evacuationShelter => new ShelterRenderer(evacuationShelter),
             _ => throw new NotSupportedException($"Cannot create a renderer for {landmark.GetType().FullName}")
         };

@@ -2,23 +2,11 @@
 
 namespace VolcanoSimulator.Rendering.Renderers;
 
-public sealed class CityRenderer : LandmarkRenderer
+public sealed class CityRenderer : SymbolBasedRenderer
 {
 
-    public CityRenderer(City landmark) : base(landmark)
+    public CityRenderer(City landmark) : base(landmark, 'C')
     {
-    }
-
-    public override void Draw(in ViewportRect viewport)
-    {
-        if (SetPosition(viewport))
-            Console.Write('C');
-    }
-
-    public override void Clear(in ViewportRect viewport)
-    {
-        if (SetPosition(viewport))
-            Console.Write(' ');
     }
 
 }
