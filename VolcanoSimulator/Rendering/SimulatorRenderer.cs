@@ -85,6 +85,8 @@ public sealed class SimulatorRenderer
                 _currentGui = _currentGui.Parent;
                 RedrawAll();
                 return true;
+            case GuiInputResult.QuitGame:
+                return false;
             default:
                 return HandleDefaultInput(key);
         }
@@ -95,7 +97,8 @@ public sealed class SimulatorRenderer
         switch (key.Key)
         {
             case ConsoleKey.Escape or ConsoleKey.X:
-                return false;
+                ShowGui(new MenuGui());
+                return true;
             case ConsoleKey.C when _selectedLandmark == null:
                 ShowGui(new PlaceCityGui());
                 break;
@@ -112,6 +115,7 @@ public sealed class SimulatorRenderer
                 Erase.SelectionIndicator(center);
                 _selectedLandmark.ClearInfo();
                 Session.Landmarks.Remove(_selectedLandmark);
+                _selectedLandmark = null;
                 Render.Cursor = center;
                 Console.Write('+');
                 break;

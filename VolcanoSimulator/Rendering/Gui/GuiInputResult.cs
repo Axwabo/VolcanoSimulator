@@ -6,6 +6,7 @@ public enum GuiInputResult
     None,
     FullRedraw,
     Passthrough,
-    Exit
+    Exit,
+    QuitGame
 
 }
