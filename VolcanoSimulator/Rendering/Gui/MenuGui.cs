@@ -1,15 +1,11 @@
 ﻿namespace VolcanoSimulator.Rendering.Gui;
 
-public sealed class MenuGui : GuiBase
+public sealed class MenuGui : CenteredBoxGuiBase
 {
 
-    private const int RowWidth = 13;
-    private const string Top = "╔═════════════╗";
-    private const string Side = "║";
-    private const string Bottom = "╚═════════════╝";
     private const string Selected = " > ";
 
-    private static readonly string[] Options =
+    protected override string[] Rows { get; } =
     [
         "Controls",
         "Exit"
@@ -17,28 +13,14 @@ public sealed class MenuGui : GuiBase
 
     private int _optionIndex;
 
-    public override void Draw()
+    protected override int DrawRow(int i, string option)
     {
-        var row = Console.WindowHeight / 2 - Options.Length / 2;
-        var center = Console.WindowWidth / 2;
-        Console.SetCursorPosition(center - Top.Length / 2, row);
-        Console.Write(Top);
-        for (var i = 0; i < Options.Length; i++)
-        {
-            var option = Options[i];
-            Console.SetCursorPosition(center - RowWidth / 2 - 1, ++row);
-            Console.Write(Side);
-            if (i == _optionIndex)
-                Console.Write(Selected);
-            else
-                Erase.TextFromCursor(Selected.Length);
-            Console.Write(option);
-            Erase.TextFromCursor(RowWidth - option.Length - Selected.Length);
-            Console.Write(Side);
-        }
-
-        Console.SetCursorPosition(center - Bottom.Length / 2, ++row);
-        Console.Write(Bottom);
+        if (i == _optionIndex)
+            Console.Write(Selected);
+        else
+            Erase.TextFromCursor(Selected.Length);
+        Console.Write(option);
+        return Selected.Length + option.Length;
     }
 
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
@@ -68,7 +50,7 @@ public sealed class MenuGui : GuiBase
     private GuiInputResult CycleSelection(int deltaY)
     {
         var startLeft = Console.WindowWidth / 2 - RowWidth / 2;
-        var firstRow = Console.WindowHeight / 2 - Options.Length / 2 + 1;
+        var firstRow = Console.WindowHeight / 2 - Rows.Length / 2 + 1;
         Console.SetCursorPosition(startLeft, _optionIndex + firstRow);
         Erase.TextFromCursor(Selected.Length);
         CycleIndexAndWrap(deltaY);
@@ -80,10 +62,10 @@ public sealed class MenuGui : GuiBase
     private void CycleIndexAndWrap(int deltaY)
     {
         _optionIndex += deltaY;
-        if (_optionIndex >= Options.Length)
+        if (_optionIndex >= Rows.Length)
             _optionIndex = 0;
         else if (_optionIndex < 0)
-            _optionIndex = Options.Length - 1;
+            _optionIndex = Rows.Length - 1;
     }
 
 }
