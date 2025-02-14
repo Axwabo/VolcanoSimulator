@@ -3,7 +3,7 @@
 public abstract class GuiBase
 {
 
-    public GuiBase? Parent { get; protected set; }
+    public GuiBase? Parent { get; init; }
 
     public abstract void Draw();
 

@@ -26,19 +26,19 @@ public sealed class MenuGui : CenteredBoxGuiBase
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
         => key.Key switch
         {
-            ConsoleKey.Enter => Select(),
+            ConsoleKey.Enter => Select(renderer),
             ConsoleKey.Escape => GuiInputResult.Exit,
             ConsoleKey.UpArrow => CycleSelection(-1),
             ConsoleKey.DownArrow => CycleSelection(1),
             _ => GuiInputResult.None
         };
 
-    private GuiInputResult Select()
+    private GuiInputResult Select(SimulatorRenderer renderer)
     {
         switch (_optionIndex)
         {
             case 0:
-                // show controls gui
+                renderer.ShowGui(new ControlsGui {Parent = this});
                 return GuiInputResult.None;
             case 1:
                 return GuiInputResult.QuitGame;

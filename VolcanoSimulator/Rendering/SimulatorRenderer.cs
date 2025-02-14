@@ -51,7 +51,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        if (CurrentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark))
+        if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui == null)
         {
             Render.SelectionIndicator(center);
             landmark.DrawInfo();

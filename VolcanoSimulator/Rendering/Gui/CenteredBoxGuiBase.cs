@@ -13,8 +13,9 @@ public abstract class CenteredBoxGuiBase : GuiBase
 
     protected virtual int DrawRow(int i, string option)
     {
+        Console.CursorLeft++;
         Console.Write(option);
-        return option.Length;
+        return option.Length + 1;
     }
 
     public override void Draw()
