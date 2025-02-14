@@ -71,6 +71,18 @@ public static class LandmarkRenderingExtensions
             Render.TextRight(1, People, evacuationLocation.AccommodatedPeople.ToString());
     }
 
+    public static bool TryClearSelectedLandmark(this SimulatorRenderer renderer)
+    {
+        if (renderer.SelectedLandmark == null)
+            return false;
+        var center = renderer.Viewport.Size / 2;
+        Erase.SelectionIndicator(center);
+        renderer.SelectedLandmark.ClearInfo();
+        Render.Cursor = center;
+        Console.Write('+');
+        return true;
+    }
+
     private static int IntLength(int value) => value == 0 ? 1 : (int) Math.Floor(Math.Log10(value)) + 1;
 
 }

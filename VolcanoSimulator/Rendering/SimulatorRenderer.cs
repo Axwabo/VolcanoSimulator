@@ -11,15 +11,21 @@ public sealed class SimulatorRenderer
 
     public SimulatorSession Session { get; }
 
+    public SimulatorInput Input { get; }
+
     private readonly RendererTable _renderers = [];
 
     public ViewportRect Viewport => new(Console.WindowWidth, Console.WindowHeight, _viewLocation.Longitude, _viewLocation.Latitude);
 
-    private GuiBase? _currentGui;
+    public GuiBase? CurrentGui { get; set; }
 
-    private LandmarkBase? _selectedLandmark;
+    public LandmarkBase? SelectedLandmark { get; set; }
 
-    public SimulatorRenderer(SimulatorSession session) => Session = session;
+    public SimulatorRenderer(SimulatorSession session)
+    {
+        Session = session;
+        Input = new SimulatorInput(this);
+    }
 
     public void RedrawAll()
     {
@@ -32,10 +38,10 @@ public sealed class SimulatorRenderer
         var viewport = Viewport;
         var center = viewport.Size / 2;
         Erase.SelectionIndicator(center);
-        if (_selectedLandmark != null)
+        if (SelectedLandmark != null)
         {
-            _selectedLandmark.ClearInfo();
-            _selectedLandmark = null;
+            SelectedLandmark.ClearInfo();
+            SelectedLandmark = null;
         }
 
         Session.Landmarks.ClearAll(_renderers, viewport);
@@ -45,16 +51,17 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        if (_currentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(_renderers, viewport, center, out _selectedLandmark))
+        if (CurrentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(_renderers, viewport, center, out var landmark))
         {
             Render.SelectionIndicator(center);
-            _selectedLandmark.DrawInfo();
+            landmark.DrawInfo();
+            SelectedLandmark = landmark;
         }
         else
         {
             Render.Cursor = center;
             Console.Write('+');
-            _currentGui?.Draw();
+            CurrentGui?.Draw();
         }
     }
 
@@ -65,81 +72,18 @@ public sealed class SimulatorRenderer
         Draw();
     }
 
-    public bool ProcessInput(in ConsoleKeyInfo key)
+    public void ShowGui(GuiBase? gui)
     {
-        if (key.Key == ConsoleKey.Escape && _currentGui == null)
-            return false;
-        if (_currentGui == null)
-            return HandleDefaultInput(key);
-        var result = _currentGui.ProcessInput(this, key);
-        switch (result)
-        {
-            case GuiInputResult.None:
-                return true;
-            case GuiInputResult.FullRedraw:
-                RedrawAll();
-                return true;
-            case GuiInputResult.Passthrough:
-                return HandleDefaultInput(key);
-            case GuiInputResult.Exit:
-                _currentGui = _currentGui.Parent;
-                RedrawAll();
-                return true;
-            case GuiInputResult.QuitGame:
-                return false;
-            default:
-                return HandleDefaultInput(key);
-        }
-    }
-
-    private bool HandleDefaultInput(in ConsoleKeyInfo key)
-    {
-        switch (key.Key)
-        {
-            case ConsoleKey.Escape or ConsoleKey.X:
-                ShowGui(new MenuGui());
-                return true;
-            case ConsoleKey.C when _selectedLandmark == null:
-                ShowGui(new PlaceCityGui());
-                break;
-            case ConsoleKey.E when _selectedLandmark == null:
-                ShowGui(new PlaceShelterGui());
-                break;
-            case ConsoleKey.V when _selectedLandmark == null:
-                ShowGui(new PlaceVolcanoGui());
-                break;
-            case ConsoleKey.Delete:
-                if (_selectedLandmark == null)
-                    break;
-                var center = Viewport.Size / 2;
-                Erase.SelectionIndicator(center);
-                _selectedLandmark.ClearInfo();
-                Session.Landmarks.Remove(_selectedLandmark);
-                _selectedLandmark = null;
-                Render.Cursor = center;
-                Console.Write('+');
-                break;
-            default:
-                if (key.Key.TryGetMovementDelta(out var delta))
-                    Move(key.IsShift() ? delta * 10 : delta);
-                break;
-        }
-
-        return true;
-    }
-
-    private void ShowGui(GuiBase gui)
-    {
-        var current = _currentGui;
-        _currentGui = gui;
+        var current = CurrentGui;
+        CurrentGui = gui;
         if (current != null)
         {
             RedrawAll();
             return;
         }
 
-        _selectedLandmark?.ClearInfo();
-        gui.Draw();
+        SelectedLandmark?.ClearInfo();
+        gui?.Draw();
     }
 
 }

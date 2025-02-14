@@ -18,6 +18,6 @@ var renderer = new SimulatorRenderer(session);
 renderer.RedrawAll();
 
 while (true)
-    if (!renderer.ProcessInput(Console.ReadKey(true)))
+    if (!renderer.Input.Process(Console.ReadKey(true)))
         break;
 Console.CursorVisible = true;
