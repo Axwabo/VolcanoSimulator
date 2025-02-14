@@ -39,11 +39,15 @@ public static class LandmarkInfoRenderingExtensions
 
     public static bool TryClearSelectedLandmark(this SimulatorRenderer renderer)
     {
-        if (renderer.SelectedLandmark == null)
+        var selected = renderer.SelectedLandmark;
+        if (selected == null)
             return false;
         var center = renderer.Viewport.Size / 2;
         Erase.SelectionIndicator(center);
-        renderer.SelectedLandmark.ClearInfo();
+        selected.ClearInfo();
+        renderer.Session.Landmarks
+            .Where(e => Coordinates.DistanceSquared(e.Location, selected.Location) < 25)
+            .DrawAllAndTryGetSelected(renderer.CachedRenderers, renderer.Viewport, center, out _);
         Render.Cursor = center;
         Console.Write('+');
         return true;

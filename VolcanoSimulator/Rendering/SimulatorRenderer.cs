@@ -13,7 +13,7 @@ public sealed class SimulatorRenderer
 
     public SimulatorInput Input { get; }
 
-    private readonly RendererTable _renderers = [];
+    public RendererTable CachedRenderers { get; } = [];
 
     public ViewportRect Viewport => new(Console.WindowWidth, Console.WindowHeight, _viewLocation.Longitude, _viewLocation.Latitude);
 
@@ -44,14 +44,14 @@ public sealed class SimulatorRenderer
             SelectedLandmark = null;
         }
 
-        Session.Landmarks.ClearAll(_renderers, viewport);
+        Session.Landmarks.ClearAll(CachedRenderers, viewport);
     }
 
     private void Draw()
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        if (CurrentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(_renderers, viewport, center, out var landmark))
+        if (CurrentGui == null && Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark))
         {
             Render.SelectionIndicator(center);
             landmark.DrawInfo();
