@@ -18,4 +18,10 @@ public static class Erase
         Console.Write(' ');
     }
 
+    public static void TextFromCursor(int amount)
+    {
+        if (amount > 0)
+            Console.Out.Write(EmptyBuffer.AsSpan()[..amount]);
+    }
+
 }
