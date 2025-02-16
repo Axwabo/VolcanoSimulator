@@ -44,6 +44,7 @@ public sealed class SimulatorRenderer
             SelectedLandmark = null;
         }
 
+        Session.AllEruptedMaterials.ClearAll(CachedRenderers, viewport);
         Session.Landmarks.ClearAll(CachedRenderers, viewport);
     }
 
@@ -53,12 +54,14 @@ public sealed class SimulatorRenderer
         var center = viewport.Size / 2;
         if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui == null)
         {
+            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport);
             Render.SelectionIndicator(center);
             landmark.DrawInfo();
             SelectedLandmark = landmark;
         }
         else
         {
+            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport);
             Render.Cursor = center;
             Console.Write('+');
             CurrentGui?.Draw();

@@ -1,9 +1,12 @@
-﻿using VolcanoSimulator.Models;
+﻿using UnitsNet;
+using VolcanoSimulator.Models;
 
 namespace VolcanoSimulator.Rendering.Renderers;
 
 public abstract class PositionedRenderer
 {
+
+    public static Length PixelSize { get; } = Length.FromHectometers(100);
 
     public IPositioned Positioned { get; }
 
