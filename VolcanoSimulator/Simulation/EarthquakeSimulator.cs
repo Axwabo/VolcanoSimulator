@@ -11,9 +11,15 @@ public sealed class EarthquakeSimulator : ISimulator
 
     private TimeSpan _remainingTime;
 
-    public required Earthquake Earthquake { get; init; }
+    public Earthquake Earthquake { get; }
 
     public bool Active => _remainingTime > TimeSpan.Zero;
+
+    public EarthquakeSimulator(Earthquake earthquake)
+    {
+        Earthquake = earthquake;
+        _remainingTime = earthquake.Duration;
+    }
 
     public void Step(SimulatorSession session, TimeSpan time)
     {
@@ -21,8 +27,11 @@ public sealed class EarthquakeSimulator : ISimulator
         foreach (var city in session.Landmarks.OfType<City>())
         {
             var distance = PositionedRenderer.PixelSize * Math.Sqrt(Coordinates.DistanceSquared(city.Location, Earthquake.Epicenter));
-            if (distance <= DistanceThreshold)
-                city.Kill((int) (city.AccommodatedPeople * casualtyChance * distance / DistanceThreshold));
+            if (distance > DistanceThreshold)
+                continue;
+            var kill = (int) (city.AccommodatedPeople * casualtyChance * (distance / DistanceThreshold) * Random.Shared.NextDouble());
+            if (kill != 0)
+                city.Kill(kill);
         }
 
         _remainingTime -= time;

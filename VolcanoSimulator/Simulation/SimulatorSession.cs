@@ -13,6 +13,8 @@ public sealed class SimulatorSession
 
     private readonly List<object> _objectsToClear = [];
 
+    public bool AnyActive => _simulators.Values.Any(e => e.Active);
+
     public void RefreshEruptedMaterial()
     {
         foreach (var volcano in Landmarks.OfType<Volcano>())
@@ -26,9 +28,7 @@ public sealed class SimulatorSession
         AllEruptedMaterials.RemoveWhere(e => e.HasDecayed);
     }
 
-    public void RegisterEarthquake(Earthquake earthquake)
-    {
-    }
+    public void RegisterEarthquake(Earthquake earthquake) => _simulators[earthquake] = new EarthquakeSimulator(earthquake);
 
     public void Step(TimeSpan time)
     {

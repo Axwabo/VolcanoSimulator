@@ -1,4 +1,5 @@
-﻿using VolcanoSimulator.Rendering.Gui;
+﻿using VolcanoSimulator.Models;
+using VolcanoSimulator.Rendering.Gui;
 
 namespace VolcanoSimulator.Rendering;
 
@@ -37,6 +38,10 @@ public sealed class SimulatorInput
     {
         switch (key.Key)
         {
+            case ConsoleKey.Enter when _renderer.SelectedLandmark is Volcano volcano:
+                _renderer.Session.RegisterEarthquake(volcano.Erupt());
+                _renderer.ShowGui(new SimulationStepGui());
+                return true;
             case ConsoleKey.Escape:
                 _renderer.ShowGui(new MenuGui());
                 return true;
