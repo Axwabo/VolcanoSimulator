@@ -18,7 +18,9 @@ public sealed class SimulatorSession
         foreach (var volcano in Landmarks.OfType<Volcano>())
         {
             volcano.ClearDecayedMaterial();
-            AllEruptedMaterials.UnionWith(volcano.EruptedMaterial);
+            foreach (var erupted in volcano.EruptedMaterial)
+                if (AllEruptedMaterials.Add(erupted) && erupted.TryCreateSimulator(out var simulator))
+                    _simulators[erupted] = simulator;
         }
 
         AllEruptedMaterials.RemoveWhere(e => e.HasDecayed);
@@ -30,7 +32,7 @@ public sealed class SimulatorSession
         {
             foreach (var (obj, simulatable) in _simulators)
             {
-                simulatable.Step(time);
+                simulatable.Step(this, time);
                 if (!simulatable.Active)
                     _objectsToClear.Add(obj);
             }

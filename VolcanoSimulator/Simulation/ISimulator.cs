@@ -5,6 +5,6 @@ public interface ISimulator
 
     bool Active { get; }
 
-    void Step(TimeSpan time);
+    void Step(SimulatorSession session, TimeSpan time);
 
 }
