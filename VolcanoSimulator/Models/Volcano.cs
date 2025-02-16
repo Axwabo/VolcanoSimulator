@@ -5,6 +5,8 @@ namespace VolcanoSimulator.Models;
 public sealed class Volcano : NamedLandmark
 {
 
+    private static Density InitialCloudDensity(VolcanicExplosivityIndex index) => Density.FromKilogramsPerCubicMeter(1 - 1d / index.Index);
+
     private readonly List<EruptedMaterialBase> _eruptedMaterial = [];
 
     public IReadOnlyCollection<EruptedMaterialBase> EruptedMaterial => _eruptedMaterial.AsReadOnly();
@@ -13,10 +15,12 @@ public sealed class Volcano : NamedLandmark
 
     public void Erupt()
     {
+        if (ExplosivityIndex.Index == 0)
+            return;
         _eruptedMaterial.Add(new AshCloud
         {
             Location = Location,
-            Mass = Density.FromKilogramsPerCubicMeter(ExplosivityIndex.Index) * ExplosivityIndex.EjectaVolume
+            Mass = InitialCloudDensity(ExplosivityIndex) * ExplosivityIndex.EjectaVolume
         });
         _eruptedMaterial.Add(new Lava
         {

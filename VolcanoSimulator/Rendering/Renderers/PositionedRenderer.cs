@@ -6,7 +6,7 @@ namespace VolcanoSimulator.Rendering.Renderers;
 public abstract class PositionedRenderer
 {
 
-    public static Length PixelSize { get; } = Length.FromHectometers(100);
+    public static Length PixelSize { get; } = Length.FromHectometers(1);
 
     public IPositioned Positioned { get; }
 

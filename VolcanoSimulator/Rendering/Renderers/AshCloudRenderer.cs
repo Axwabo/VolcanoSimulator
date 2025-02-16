@@ -8,7 +8,17 @@ public sealed class AshCloudRenderer : EruptedMaterialRenderer
 
     private static readonly Density MaxDisplayedDensity = Density.FromKilogramsPerLiter(1);
 
-    private static readonly char[] Densities = ['.', ':', 'o', 'O', '0', '@', '#'];
+    private static readonly char[] Densities = ['@', 'G', '0', 'O', 'o', ':', '.'];
+
+    private static double EaseInCubic(double x) => x * x * x;
+
+    private static char GetDensityChar(AshCloud cloud)
+    {
+        var max = MaxDisplayedDensity.As(AshCloud.SafeDensity.Unit);
+        var ratio = Math.Min(max, cloud.CurrentDensity.As(AshCloud.SafeDensity.Unit)) / max;
+        var densityChar = Densities[Math.Min(Densities.Length - 1, (int) Math.Round(EaseInCubic(-Math.Log2(ratio) / Math.Log2(max)) * Densities.Length))];
+        return densityChar;
+    }
 
     public AshCloudRenderer(AshCloud material) : base(material)
     {
@@ -19,19 +29,21 @@ public sealed class AshCloudRenderer : EruptedMaterialRenderer
         var cloud = (AshCloud) Positioned;
         if (!viewport.TryTransform(cloud.Location, out var origin))
             return;
-        var longitudePixels = (int) Math.Ceiling(cloud.Radius / PixelSize);
-        var latitudePixels = (int) Math.Ceiling(cloud.Radius / PixelSize);
-        var densityChar = Densities[Math.Min(Densities.Length - 1, (int) (cloud.CurrentDensity / MaxDisplayedDensity * Densities.Length))];
-        Console.ForegroundColor = ConsoleColor.Gray;
-        var minY = Math.Max(0, origin.Latitude - latitudePixels);
-        var maxY = Math.Min(viewport.Size.Latitude, origin.Latitude + latitudePixels);
+        var sizePixels = (int) Math.Ceiling(cloud.Radius / PixelSize);
+        var densityChar = GetDensityChar(cloud);
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        var minY = Math.Max(0, origin.Latitude - sizePixels);
+        var maxY = Math.Min(viewport.Size.Latitude, origin.Latitude + sizePixels);
         for (var y = minY; y < maxY; y++)
         {
-            Render.Cursor = new Coordinates(y, origin.Longitude - longitudePixels);
-            var minX = Math.Max(0, origin.Longitude - longitudePixels);
-            var maxX = Math.Min(viewport.Size.Longitude, origin.Longitude + longitudePixels);
+            var minX = Math.Max(0, origin.Longitude - sizePixels);
+            var maxX = Math.Min(viewport.Size.Longitude, origin.Longitude + sizePixels);
+            Render.Cursor = new Coordinates(y, minX);
             for (var x = minX; x < maxX; x++)
-                Console.Write(densityChar);
+                if (Coordinates.DistanceSquared(origin, new Coordinates(y, x)) <= sizePixels * sizePixels)
+                    Console.Write(densityChar);
+                else if (x < maxX - 1)
+                    Console.CursorLeft++;
         }
 
         Console.ResetColor();
