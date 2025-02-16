@@ -8,6 +8,7 @@ public static class LandmarkInfoRenderingExtensions
     private const string Name = "Name: ";
     private const string People = "People: ";
     private const string Capacity = "Capacity: ";
+    private const string ExplosivityIndex = "VEI: ";
 
     public static void ClearInfo(this LandmarkBase landmark)
     {
@@ -16,6 +17,8 @@ public static class LandmarkInfoRenderingExtensions
         Erase.TextRight(row++, typeLength);
         if (landmark is NamedLandmark named)
             Erase.TextRight(row++, Name.Length + named.Name.Length);
+        if (landmark is Volcano)
+            Erase.TextRight(row++, ExplosivityIndex.Length + 1);
         if (landmark is not IEvacuationLocation evacuationLocation)
             return;
         Erase.TextRight(row++, People.Length + IntLength(evacuationLocation.AccommodatedPeople));
@@ -30,6 +33,8 @@ public static class LandmarkInfoRenderingExtensions
         Render.TextRight(row++, type);
         if (landmark is NamedLandmark named)
             Render.TextRight(row++, Name, named.Name);
+        if (landmark is Volcano volcano)
+            Render.TextRight(row++, ExplosivityIndex, volcano.ExplosivityIndex.Index.ToString());
         if (landmark is not IEvacuationLocation evacuationLocation)
             return;
         Render.TextRight(row++, People, evacuationLocation.AccommodatedPeople.ToString());
