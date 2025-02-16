@@ -13,6 +13,7 @@ public static class EruptedMaterialRenderingExtensions
         renderer = material switch
         {
             AshCloud ashCloud => new AshCloudRenderer(ashCloud),
+            Lava lava => new LavaRenderer(lava),
             _ => throw new NotSupportedException($"Cannot create a renderer for {material.GetType().FullName}")
         };
         renderers.Add(material, renderer);

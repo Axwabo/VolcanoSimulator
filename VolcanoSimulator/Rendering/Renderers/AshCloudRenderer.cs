@@ -26,12 +26,19 @@ public sealed class AshCloudRenderer : EruptedMaterialRenderer
 
     public override void Draw(in ViewportRect viewport)
     {
-        var cloud = (AshCloud) Positioned;
-        if (!viewport.TryTransform(cloud.Location, out var origin))
-            return;
-        var sizePixels = (int) Math.Ceiling(cloud.Radius / PixelSize);
-        var densityChar = GetDensityChar(cloud);
         Console.ForegroundColor = ConsoleColor.DarkGray;
+        var cloud = (AshCloud) Positioned;
+        Draw(viewport, cloud, GetDensityChar(cloud));
+        Console.ResetColor();
+    }
+
+    public override void Clear(in ViewportRect viewport) => Draw(viewport, (AshCloud) Positioned, ' ');
+
+    private static void Draw(ViewportRect viewport, AshCloud cloud, char densityChar)
+    {
+        var (originX, originY) = viewport.Transform(cloud.Location);
+        var origin = new Coordinates(originY, originX);
+        var sizePixels = (int) Math.Ceiling(cloud.Radius / PixelSize);
         var minY = Math.Max(0, origin.Latitude - sizePixels);
         var maxY = Math.Min(viewport.Size.Latitude, origin.Latitude + sizePixels);
         for (var y = minY; y < maxY; y++)
@@ -45,13 +52,6 @@ public sealed class AshCloudRenderer : EruptedMaterialRenderer
                 else if (x < maxX - 1)
                     Console.CursorLeft++;
         }
-
-        Console.ResetColor();
-    }
-
-    public override void Clear(in ViewportRect viewport)
-    {
-        // TODO
     }
 
 }
