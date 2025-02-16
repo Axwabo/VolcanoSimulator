@@ -2,12 +2,10 @@
 
 namespace VolcanoSimulator.Models;
 
-public sealed class AshCloud
+public sealed class AshCloud : EruptedMaterialBase
 {
 
-    public static readonly Density SafeDensity = Density.FromMilligramsPerCubicMeter(4);
-
-    public required Coordinates Origin { get; init; }
+    public static Density SafeDensity { get; } = Density.FromMilligramsPerCubicMeter(4);
 
     public required Mass Mass { get; init; }
 
