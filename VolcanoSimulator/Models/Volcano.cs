@@ -13,10 +13,15 @@ public sealed class Volcano : NamedLandmark
 
     public required VolcanicExplosivityIndex ExplosivityIndex { get; init; }
 
-    public void Erupt()
+    public Earthquake Erupt()
     {
         if (ExplosivityIndex.Index == 0)
-            return;
+            return new Earthquake
+            {
+                Duration = TimeSpan.FromMinutes(1),
+                Epicenter = Location,
+                Strength = Force.FromKilonewtons(1)
+            };
         _eruptedMaterial.Add(new AshCloud
         {
             Location = Location,
@@ -30,6 +35,12 @@ public sealed class Volcano : NamedLandmark
                 (int) Lava.MaxInitialTemperature.DegreesCelsius
             ))
         });
+        return new Earthquake
+        {
+            Duration = TimeSpan.FromMinutes(Random.Shared.Next(ExplosivityIndex.Index * 2, ExplosivityIndex.Index * 10)),
+            Epicenter = Location,
+            Strength = Force.FromNewtons((ExplosivityIndex.Index + 1) * 100)
+        };
     }
 
     public void ClearDecayedMaterial() => _eruptedMaterial.RemoveAll(e => e.HasDecayed);
