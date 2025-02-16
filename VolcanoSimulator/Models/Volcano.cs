@@ -28,4 +28,6 @@ public sealed class Volcano : NamedLandmark
         });
     }
 
+    public void ClearDecayedMaterial() => _eruptedMaterial.RemoveAll(e => e.HasDecayed);
+
 }

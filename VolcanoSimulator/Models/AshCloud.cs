@@ -11,7 +11,7 @@ public sealed class AshCloud : EruptedMaterialBase
 
     public Length Radius { get; private set; } = Length.FromMeters(1 / Math.Cbrt(Math.PI));
 
-    public bool Decayed => CurrentDensity <= SafeDensity;
+    public override bool HasDecayed => CurrentDensity <= SafeDensity;
 
     public Volume Volume => Math.PI * Radius * Radius * Radius;
 

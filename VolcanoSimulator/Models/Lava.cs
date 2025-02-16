@@ -27,7 +27,7 @@ public sealed class Lava : EruptedMaterialBase
 
     public Area Area => SideLength * SideLength;
 
-    public bool HasCooledDown => CurrentTemperature <= CoolTemperature;
+    public override bool HasDecayed => CurrentTemperature <= CoolTemperature;
 
     public void Grow(Length amount)
     {
