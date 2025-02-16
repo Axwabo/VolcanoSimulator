@@ -9,7 +9,7 @@ public static class LandmarkRenderingExtensions
 
     public static LandmarkRenderer GetRenderer(this RendererTable renderers, LandmarkBase landmark)
     {
-        if (renderers.TryGetValue(landmark, out var renderer) && renderer != null)
+        if (renderers.TryGetValue(landmark, out var baseRenderer) && baseRenderer is LandmarkRenderer renderer)
             return renderer;
         renderer = landmark switch
         {
