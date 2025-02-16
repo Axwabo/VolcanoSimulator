@@ -8,6 +8,8 @@ public sealed class SimulationStepGui : GuiBase
 
     private TimeSpan _step = TimeSpan.FromMinutes(1);
 
+    public override bool AllowIndicators => true;
+
     public override void Draw()
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 1);

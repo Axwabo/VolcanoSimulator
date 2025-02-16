@@ -52,12 +52,14 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui == null)
+        if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui is not {AllowIndicators: false})
         {
             Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport);
             Render.SelectionIndicator(center);
             landmark.DrawInfo();
             SelectedLandmark = landmark;
+            if (CurrentGui is {AllowIndicators: true})
+                CurrentGui.Draw();
         }
         else
         {
