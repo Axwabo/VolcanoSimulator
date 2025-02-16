@@ -26,6 +26,10 @@ public sealed class SimulatorSession
         AllEruptedMaterials.RemoveWhere(e => e.HasDecayed);
     }
 
+    public void RegisterEarthquake(Earthquake earthquake)
+    {
+    }
+
     public void Step(TimeSpan time)
     {
         try

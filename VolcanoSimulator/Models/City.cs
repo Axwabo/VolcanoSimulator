@@ -11,4 +11,12 @@ public sealed class City : NamedLandmark, IEvacuationLocation
         AccommodatedPeople += people;
     }
 
+    public void Kill(int people)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(people);
+        if (people > AccommodatedPeople)
+            throw new InvalidOperationException("Cannot kill more people than there are accommodated");
+        AccommodatedPeople -= people;
+    }
+
 }
