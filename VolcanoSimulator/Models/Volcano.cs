@@ -15,12 +15,12 @@ public sealed class Volcano : NamedLandmark
     {
         _eruptedMaterial.Add(new AshCloud
         {
-            Origin = Location,
+            Location = Location,
             Mass = Density.FromKilogramsPerCubicMeter(ExplosivityIndex.Index) * ExplosivityIndex.EjectaVolume
         });
         _eruptedMaterial.Add(new Lava
         {
-            Origin = Location,
+            Location = Location,
             InitialTemperature = Temperature.FromDegreesCelsius(Random.Shared.Next(
                 (int) Lava.MinInitialTemperature.DegreesCelsius,
                 (int) Lava.MaxInitialTemperature.DegreesCelsius

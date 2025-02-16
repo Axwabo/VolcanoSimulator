@@ -1,6 +1,6 @@
 ﻿namespace VolcanoSimulator.Models;
 
-public interface IEvacuationLocation
+public interface IEvacuationLocation : IPositioned
 {
 
     int AccommodatedPeople { get; }
