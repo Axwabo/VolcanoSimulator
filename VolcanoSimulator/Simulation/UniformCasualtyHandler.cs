@@ -10,6 +10,7 @@ public readonly ref struct UniformCasualtyHandler : IDisposable
 
     public UniformCasualtyHandler(double rate, List<City> cityCache, SimulatorSession session)
     {
+        CasualtyExtensions.ValidateRate(rate);
         _rate = rate;
         _cityCache = cityCache;
         _cityCache.AddRange(session.Landmarks.OfType<City>());
