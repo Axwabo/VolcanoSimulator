@@ -11,6 +11,7 @@ public static class EruptedMaterialSimulatingExtensions
         simulator = material switch
         {
             AshCloud cloud => new AshCloudSimulator {Material = cloud},
+            Lava lava => new LavaSimulator {Material = lava},
             _ => null
         };
         return simulator is not null;
