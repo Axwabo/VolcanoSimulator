@@ -28,7 +28,7 @@ public sealed class EarthquakeSimulator : ISimulator
         {
             var distance = PositionedRenderer.PixelSize * Math.Sqrt(Coordinates.DistanceSquared(city.Location, Earthquake.Epicenter));
             if (distance <= DistanceThreshold)
-                city.ClaimLives(casualtyChance * (distance / DistanceThreshold));
+                city.KillPercentage(casualtyChance * Random.Shared.NextDouble() * (distance / DistanceThreshold));
         }
 
         _remainingTime -= time;
