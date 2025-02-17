@@ -33,7 +33,9 @@ public sealed class Volcano : NamedLandmark
             InitialTemperature = Temperature.FromDegreesCelsius(Random.Shared.Next(
                 (int) Lava.MinInitialTemperature.DegreesCelsius,
                 (int) Lava.MaxInitialTemperature.DegreesCelsius
-            ))
+            )),
+            FlowAngle = Angle.FromDegrees(Random.Shared.NextDouble() * 360),
+            Volume = ExplosivityIndex.EjectaVolume
         });
         return new Earthquake
         {
