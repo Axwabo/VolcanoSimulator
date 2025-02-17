@@ -25,9 +25,9 @@ public sealed class LavaSimulator : EruptedMaterialSimulator<Lava>
     private void ClaimLives(SimulatorSession session)
     {
         using var handler = new UniformCasualtyHandler(1, _cities, session);
-        var (startX, startY) = Material.Location;
-        var endX = startX + (int) (Material.Length / PositionedRenderer.PixelSize);
-        var endY = startY + (int) (Material.Width / PositionedRenderer.PixelSize);
+        var (startY, startX) = Material.Location;
+        var endX = startX + (int) (Material.Width / PositionedRenderer.PixelSize);
+        var endY = startY + (int) (Material.Length / PositionedRenderer.PixelSize);
         if (startX > endX)
             (startX, endX) = (endX, startX);
         if (startY > endY)
