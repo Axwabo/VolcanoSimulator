@@ -24,4 +24,10 @@ public static class Erase
             Console.Out.Write(EmptyBuffer.AsSpan()[..amount]);
     }
 
+    public static void SimulatorLocation(int length)
+    {
+        Console.SetCursorPosition(0, 1);
+        TextFromCursor(length);
+    }
+
 }

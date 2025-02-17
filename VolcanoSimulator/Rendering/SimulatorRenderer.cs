@@ -9,6 +9,8 @@ public sealed class SimulatorRenderer
 
     private Coordinates _viewLocation = new(-Console.WindowHeight / 2, -Console.WindowWidth / 2);
 
+    private int _previousLocationLength;
+
     public SimulatorSession Session { get; }
 
     public SimulatorInput Input { get; }
@@ -37,6 +39,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
+        Erase.SimulatorLocation(_previousLocationLength);
         Erase.SelectionIndicator(center);
         if (SelectedLandmark != null)
         {
@@ -68,6 +71,8 @@ public sealed class SimulatorRenderer
             Console.Write('+');
             CurrentGui?.Draw();
         }
+
+        _previousLocationLength = Render.SimulatorInfo(viewport, _viewLocation);
     }
 
     public void Move(Coordinates delta)
@@ -87,7 +92,8 @@ public sealed class SimulatorRenderer
             return;
         }
 
-        SelectedLandmark?.ClearInfo();
+        if (gui is {AllowIndicators: false})
+            SelectedLandmark?.ClearInfo();
         gui?.Draw();
     }
 
