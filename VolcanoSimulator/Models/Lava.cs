@@ -13,6 +13,10 @@ public sealed class Lava : EruptedMaterialBase
 
     public static Temperature MaxInitialTemperature { get; } = Temperature.FromDegreesCelsius(2200);
 
+    private readonly Angle _flowAngle;
+
+    private Length _height;
+
     public required Temperature InitialTemperature
     {
         init
@@ -22,8 +26,6 @@ public sealed class Lava : EruptedMaterialBase
             CurrentTemperature = value;
         }
     }
-
-    private readonly Angle _flowAngle;
 
     public required Angle FlowAngle
     {
@@ -40,8 +42,12 @@ public sealed class Lava : EruptedMaterialBase
 
     public required Volume Volume
     {
-        get => Width * Length * Height;
-        init => Height = CalculateHeight(value);
+        get
+        {
+            var volume = Width * Length * _height;
+            return volume.CubicMeters < 0 ? -volume : volume;
+        }
+        init => _height = CalculateHeight(value);
     }
 
     public Temperature CurrentTemperature { get; private set; }
@@ -50,13 +56,15 @@ public sealed class Lava : EruptedMaterialBase
 
     public Length Length { get; private set; } = Length.FromMeters(1);
 
-    public Length Height { get; private set; }
-
-    public bool CanFlow => !HasDecayed && Height > MinFlowingHeight;
+    public bool CanFlow => !HasDecayed && _height > MinFlowingHeight;
 
     public override bool HasDecayed => CurrentTemperature <= CoolTemperature;
 
-    private Length CalculateHeight(Volume volume) => volume / Width / Length;
+    private Length CalculateHeight(Volume volume)
+    {
+        var height = volume / Width / Length;
+        return height.Meters < 0 ? -height : height;
+    }
 
     public void Flow(Length amount)
     {
@@ -64,9 +72,10 @@ public sealed class Lava : EruptedMaterialBase
             throw new InvalidOperationException("The lava can no longer flow");
         if (amount.Meters <= 0)
             throw new ArgumentOutOfRangeException(nameof(amount), "Flow length must be positive");
+        var volume = Volume;
         Width += amount * Math.Cos(FlowAngle.Radians);
         Length += amount * Math.Sin(FlowAngle.Radians);
-        Height = CalculateHeight(Volume);
+        _height = CalculateHeight(volume);
     }
 
     public void Cool(TemperatureDelta amount)
