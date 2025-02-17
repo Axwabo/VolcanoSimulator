@@ -22,10 +22,12 @@ public sealed class Volcano : NamedLandmark
                 Epicenter = Location,
                 Strength = Force.FromKilonewtons(1)
             };
+        var totalEjecta = ExplosivityIndex.EjectaVolume;
+        var lavaVolume = totalEjecta * 0.01d;
         _eruptedMaterial.Add(new AshCloud
         {
             Location = Location,
-            Mass = InitialCloudDensity(ExplosivityIndex) * ExplosivityIndex.EjectaVolume
+            Mass = InitialCloudDensity(ExplosivityIndex) * (totalEjecta - lavaVolume)
         });
         _eruptedMaterial.Add(new Lava
         {
@@ -35,7 +37,7 @@ public sealed class Volcano : NamedLandmark
                 (int) Lava.MaxInitialTemperature.DegreesCelsius
             )),
             FlowAngle = Angle.FromDegrees(Random.Shared.NextDouble() * 360),
-            Volume = ExplosivityIndex.EjectaVolume
+            Volume = lavaVolume
         });
         return new Earthquake
         {
