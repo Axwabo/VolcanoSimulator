@@ -7,9 +7,10 @@ public sealed class Lava : EruptedMaterialBase
 
     public static Temperature CoolTemperature { get; } = Temperature.FromDegreesCelsius(15);
 
+    // https://www.britannica.com/science/lava-volcanic-ejecta
     public static Temperature MinInitialTemperature { get; } = Temperature.FromDegreesCelsius(700);
 
-    public static Temperature MaxInitialTemperature { get; } = Temperature.FromDegreesCelsius(2200);
+    public static Temperature MaxInitialTemperature { get; } = Temperature.FromDegreesCelsius(1200);
 
     private readonly Angle _flowAngle;
 
