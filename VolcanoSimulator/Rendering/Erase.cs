@@ -22,10 +22,14 @@ public static class Erase
             Console.Out.Write(EmptyBuffer.AsSpan()[..amount]);
     }
 
-    public static void SimulatorLocation(int length)
+    public static void SimulatorLocation(int length, int previousEarthquakeLength)
     {
         Console.SetCursorPosition(0, 1);
         TextFromCursor(length);
+        if (previousEarthquakeLength == 0)
+            return;
+        Console.SetCursorPosition(0, 2);
+        TextFromCursor(previousEarthquakeLength);
     }
 
 }

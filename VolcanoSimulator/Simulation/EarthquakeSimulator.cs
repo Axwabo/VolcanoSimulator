@@ -19,14 +19,20 @@ public sealed class EarthquakeSimulator : ISimulator
         _remainingTime = earthquake.Duration;
     }
 
+    public double GetStrengthMultiplier(Coordinates location)
+    {
+        var distance = PositionedRenderer.PixelSize * Math.Sqrt(Coordinates.DistanceSquared(location, Earthquake.Epicenter));
+        return Math.Max(0, 1 - distance / DistanceThreshold);
+    }
+
     public void Step(SimulatorSession session, TimeSpan time)
     {
         var casualtyChance = Earthquake.Strength.Newtons / 5000;
         foreach (var city in session.Landmarks.OfType<City>())
         {
-            var distance = PositionedRenderer.PixelSize * Math.Sqrt(Coordinates.DistanceSquared(city.Location, Earthquake.Epicenter));
-            if (distance <= DistanceThreshold)
-                city.KillPercentage(casualtyChance * Random.Shared.NextDouble() * (distance / DistanceThreshold));
+            var strength = GetStrengthMultiplier(city.Location);
+            if (strength != 0)
+                city.KillPercentage(casualtyChance * Random.Shared.NextDouble() * strength);
         }
 
         _remainingTime -= time;

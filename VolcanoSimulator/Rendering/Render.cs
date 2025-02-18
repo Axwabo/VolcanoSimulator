@@ -38,7 +38,7 @@ public static class Render
         Console.Write('<');
     }
 
-    public static int SimulatorInfo(in ViewportRect viewport, Coordinates location)
+    public static (int LocationLength, int EarthquakeLength) SimulatorInfo(in ViewportRect viewport, Coordinates location, Force earthquakeStrength)
     {
         var (y, x) = location + viewport.Size / 2;
         Console.SetCursorPosition(0, 0);
@@ -48,7 +48,14 @@ public static class Render
         Console.Write("m; ");
         Console.Write((y * PositionedRenderer.PixelSize).As(LengthUnit.Meter));
         Console.Write('m');
-        return Console.CursorLeft;
+        if (earthquakeStrength <= Force.Zero)
+            return (Console.CursorLeft, 0);
+        var left = Console.CursorLeft;
+        Console.SetCursorPosition(0, 2);
+        Console.Write("Earthquake strength: ");
+        Console.Write(Math.Ceiling(earthquakeStrength.Newtons));
+        Console.Write('N');
+        return (left, Console.CursorLeft);
     }
 
 }

@@ -13,6 +13,8 @@ public sealed class SimulatorSession
 
     public bool AnyActive => _simulators.Values.Any(e => e.Active);
 
+    public IEnumerable<EarthquakeSimulator> EarthquakeSimulators => _simulators.Values.OfType<EarthquakeSimulator>();
+
     public void RefreshEruptedMaterial()
     {
         foreach (var volcano in Landmarks.OfType<Volcano>())
@@ -32,10 +34,10 @@ public sealed class SimulatorSession
     {
         try
         {
-            foreach (var (obj, simulatable) in _simulators)
+            foreach (var (obj, simulator) in _simulators)
             {
-                simulatable.Step(this, time);
-                if (!simulatable.Active)
+                simulator.Step(this, time);
+                if (!simulator.Active)
                     _objectsToClear.Add(obj);
             }
 

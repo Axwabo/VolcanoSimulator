@@ -9,6 +9,7 @@ public sealed class SimulatorRenderer
     private Coordinates _viewLocation = new(-Console.WindowHeight / 2, -Console.WindowWidth / 2);
 
     private int _previousLocationLength;
+    private int _previousEarthquakeLength;
 
     public SimulatorSession Session { get; }
 
@@ -38,7 +39,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        Erase.SimulatorLocation(_previousLocationLength);
+        Erase.SimulatorLocation(_previousLocationLength, _previousEarthquakeLength);
         Erase.SelectionIndicator(center);
         if (SelectedLandmark != null)
         {
@@ -71,7 +72,8 @@ public sealed class SimulatorRenderer
             CurrentGui?.Draw();
         }
 
-        _previousLocationLength = Render.SimulatorInfo(viewport, _viewLocation);
+        var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
+        (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
     }
 
     public void Move(Coordinates delta)
