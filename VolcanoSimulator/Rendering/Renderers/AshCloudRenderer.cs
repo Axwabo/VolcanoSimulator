@@ -20,6 +20,8 @@ public sealed class AshCloudRenderer : EruptedMaterialRenderer
         return densityChar;
     }
 
+    public override MaterialLayer Layer => MaterialLayer.AshCloud;
+
     public AshCloudRenderer(AshCloud material) : base(material)
     {
     }

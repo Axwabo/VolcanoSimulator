@@ -5,6 +5,8 @@ namespace VolcanoSimulator.Rendering.Renderers;
 public sealed class LavaRenderer : EruptedMaterialRenderer
 {
 
+    public override MaterialLayer Layer => MaterialLayer.Lava;
+
     public LavaRenderer(Lava material) : base(material)
     {
     }
