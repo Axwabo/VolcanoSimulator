@@ -22,7 +22,13 @@ public static class LavaColor
             color = InterpolateColor(CoolColor, Red, Lava.CoolTemperature, Lava.MinInitialTemperature, temperature);
         else
             color = InterpolateColor(Red, Orange, Lava.MinInitialTemperature, Lava.MaxInitialTemperature, temperature);
-        Console.Write($"\e[48;2;{color.R};{color.G};{color.B}m");
+        Console.Write("\e[48;2;");
+        Console.Write(color.R);
+        Console.Write(";");
+        Console.Write(color.G);
+        Console.Write(";");
+        Console.Write(color.B);
+        Console.Write("m");
     }
 
     private static Color InterpolateColor(Color min, Color max, Temperature minTemp, Temperature maxTemp, Temperature current)
