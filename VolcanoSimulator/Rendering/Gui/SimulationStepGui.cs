@@ -1,12 +1,20 @@
-﻿namespace VolcanoSimulator.Rendering.Gui;
+﻿using VolcanoSimulator.Rendering.Renderers;
+
+namespace VolcanoSimulator.Rendering.Gui;
 
 public sealed class SimulationStepGui : GuiBase
 {
+
+    private const string Padding = "   ";
 
     private static readonly TimeSpan MinTimeStep = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan MaxTimeStep = TimeSpan.FromDays(1);
 
     private TimeSpan _step = TimeSpan.FromMinutes(1);
+
+    private MaterialLayer _layers;
+
+    public SimulationStepGui(MaterialLayer layers) => _layers = layers;
 
     public override bool AllowIndicators => true;
 
@@ -15,14 +23,25 @@ public sealed class SimulationStepGui : GuiBase
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         Console.Write("Time step: ");
         Console.Write(_step);
+        Console.Write(Padding);
+        SetColor(MaterialLayer.Lava);
+        Console.Write("[L]ava");
+        Console.ResetColor();
+        Console.Write(Padding);
+        SetColor(MaterialLayer.AshCloud);
+        Console.Write("[C]louds");
+        Console.ResetColor();
     }
+
+    private void SetColor(MaterialLayer highlighted) => Console.ForegroundColor = _layers.HasFlagFast(highlighted) ? ConsoleColor.White : ConsoleColor.DarkGray;
 
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key) => key.Key switch
     {
         ConsoleKey.Enter => Step(renderer),
-        ConsoleKey.Escape => GuiInputResult.None,
         ConsoleKey.Spacebar => AdjustStep(),
-        ConsoleKey.E or ConsoleKey.V or ConsoleKey.C => GuiInputResult.None,
+        ConsoleKey.L => ToggleLayer(renderer, MaterialLayer.Lava),
+        ConsoleKey.C => ToggleLayer(renderer, MaterialLayer.AshCloud),
+        ConsoleKey.Escape or ConsoleKey.E or ConsoleKey.V or ConsoleKey.Delete => GuiInputResult.None,
         _ => GuiInputResult.Passthrough
     };
 
@@ -39,6 +58,13 @@ public sealed class SimulationStepGui : GuiBase
             _step = MinTimeStep;
         Draw();
         return GuiInputResult.None;
+    }
+
+    private GuiInputResult ToggleLayer(SimulatorRenderer renderer, MaterialLayer layer)
+    {
+        _layers ^= layer;
+        renderer.Layers = _layers;
+        return GuiInputResult.FullRedraw;
     }
 
 }

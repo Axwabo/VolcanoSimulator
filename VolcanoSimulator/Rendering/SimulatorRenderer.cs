@@ -1,4 +1,5 @@
 ﻿using VolcanoSimulator.Rendering.Gui;
+using VolcanoSimulator.Rendering.Renderers;
 using VolcanoSimulator.Simulation;
 
 namespace VolcanoSimulator.Rendering;
@@ -10,6 +11,7 @@ public sealed class SimulatorRenderer
 
     private int _previousLocationLength;
     private int _previousEarthquakeLength;
+    private MaterialLayer _previousLayers;
 
     public SimulatorSession Session { get; }
 
@@ -22,6 +24,8 @@ public sealed class SimulatorRenderer
     public GuiBase? CurrentGui { get; set; }
 
     public LandmarkBase? SelectedLandmark { get; set; }
+
+    public MaterialLayer Layers { get; set; } = MaterialLayer.AshCloud | MaterialLayer.Lava;
 
     public SimulatorRenderer(SimulatorSession session)
     {
@@ -47,7 +51,7 @@ public sealed class SimulatorRenderer
             SelectedLandmark = null;
         }
 
-        Session.AllEruptedMaterials.ClearAll(CachedRenderers, viewport);
+        Session.AllEruptedMaterials.ClearAll(CachedRenderers, viewport, _previousLayers);
         Session.Landmarks.ClearAll(CachedRenderers, viewport);
     }
 
@@ -57,7 +61,7 @@ public sealed class SimulatorRenderer
         var center = viewport.Size / 2;
         if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui is not {AllowIndicators: false})
         {
-            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport);
+            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
             Render.SelectionIndicator(center);
             landmark.DrawInfo();
             SelectedLandmark = landmark;
@@ -66,7 +70,7 @@ public sealed class SimulatorRenderer
         }
         else
         {
-            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport);
+            Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
             Render.Cursor = center;
             Console.Write('+');
             CurrentGui?.Draw();
@@ -74,6 +78,7 @@ public sealed class SimulatorRenderer
 
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
         (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
+        _previousLayers = Layers;
     }
 
     public void Move(Coordinates delta)

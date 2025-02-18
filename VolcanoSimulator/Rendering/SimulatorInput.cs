@@ -39,7 +39,7 @@ public sealed class SimulatorInput
         {
             case ConsoleKey.Enter when _renderer.SelectedLandmark is Volcano volcano:
                 _renderer.Session.RegisterEarthquake(volcano.Erupt());
-                _renderer.ShowGui(new SimulationStepGui());
+                _renderer.ShowGui(new SimulationStepGui(_renderer.Layers));
                 return true;
             case ConsoleKey.Escape:
                 _renderer.ShowGui(new MenuGui());
