@@ -30,6 +30,8 @@ public sealed class SimulatorSession
 
     public void RegisterEarthquake(Earthquake earthquake) => _simulators[earthquake] = new EarthquakeSimulator(earthquake);
 
+    public void RegisterSurvivorGroup(SurvivorGroup group) => _simulators[group] = new SurvivorGroupSimulator(group);
+
     public void Step(TimeSpan time)
     {
         try
