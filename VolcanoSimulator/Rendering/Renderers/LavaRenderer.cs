@@ -11,8 +11,8 @@ public sealed class LavaRenderer : EruptedMaterialRenderer
 
     public override void Draw(in ViewportRect viewport)
     {
-        Console.BackgroundColor = ConsoleColor.Red; // TODO: temperature to color
         var lava = (Lava) Positioned;
+        LavaColor.ColorBackground(lava.CurrentTemperature);
         Draw(viewport, lava);
         Console.ResetColor();
     }

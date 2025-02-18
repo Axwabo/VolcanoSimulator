@@ -1,0 +1,38 @@
+﻿using UnitsNet;
+using VolcanoSimulator.Models;
+using Color = (int R, int G, int B);
+
+namespace VolcanoSimulator.Rendering;
+
+public static class LavaColor
+{
+
+    private static readonly Color CoolColor = (0, 0, 0);
+    private static readonly Color Red = (255, 0, 0);
+    private static readonly Color Orange = (255, 128, 0);
+
+    public static void ColorBackground(Temperature temperature)
+    {
+        Color color;
+        if (temperature <= Lava.CoolTemperature)
+            color = CoolColor;
+        else if (temperature >= Lava.MaxInitialTemperature)
+            color = Orange;
+        else if (temperature < Lava.MinInitialTemperature)
+            color = InterpolateColor(CoolColor, Red, Lava.CoolTemperature, Lava.MinInitialTemperature, temperature);
+        else
+            color = InterpolateColor(Red, Orange, Lava.MinInitialTemperature, Lava.MaxInitialTemperature, temperature);
+        Console.Write($"\e[48;2;{color.R};{color.G};{color.B}m");
+    }
+
+    private static Color InterpolateColor(Color min, Color max, Temperature minTemp, Temperature maxTemp, Temperature current)
+    {
+        var ratio = (current - minTemp) / (maxTemp - minTemp);
+        return (
+            (int) (min.R + ratio * (max.R - min.R)),
+            (int) (min.G + ratio * (max.G - min.G)),
+            (int) (min.B + ratio * (max.B - min.B))
+        );
+    }
+
+}
