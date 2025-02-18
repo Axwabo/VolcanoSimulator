@@ -37,13 +37,20 @@ public sealed class SimulationStepGui : GuiBase
 
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key) => key.Key switch
     {
+        ConsoleKey.Escape => ShowMenu(renderer),
         ConsoleKey.Enter => Step(renderer),
         ConsoleKey.Spacebar => AdjustStep(),
         ConsoleKey.L => ToggleLayer(renderer, MaterialLayer.Lava),
         ConsoleKey.C => ToggleLayer(renderer, MaterialLayer.AshCloud),
-        ConsoleKey.Escape or ConsoleKey.E or ConsoleKey.V or ConsoleKey.Delete => GuiInputResult.None,
+        ConsoleKey.E or ConsoleKey.V or ConsoleKey.Delete => GuiInputResult.None,
         _ => GuiInputResult.Passthrough
     };
+
+    private GuiInputResult ShowMenu(SimulatorRenderer renderer)
+    {
+        renderer.ShowGui(new MenuGui {Parent = this});
+        return GuiInputResult.None;
+    }
 
     private GuiInputResult Step(SimulatorRenderer renderer)
     {

@@ -20,7 +20,7 @@ public abstract class CenteredBoxGuiBase : GuiBase
 
     public override void Draw()
     {
-        var row = Console.WindowHeight / 2 - Rows.Length / 2;
+        var row = Console.WindowHeight / 2 - Rows.Length / 2 - 1;
         var center = Console.WindowWidth / 2;
         Console.SetCursorPosition(center - Top.Length / 2, row);
         Console.Write(Top);

@@ -7,6 +7,7 @@ public sealed class MenuGui : CenteredBoxGuiBase
 
     protected override string[] Rows { get; } =
     [
+        "Back",
         "Controls",
         "Exit"
     ];
@@ -38,9 +39,11 @@ public sealed class MenuGui : CenteredBoxGuiBase
         switch (_optionIndex)
         {
             case 0:
+                return GuiInputResult.Exit;
+            case 1:
                 renderer.ShowGui(new ControlsGui {Parent = this});
                 return GuiInputResult.None;
-            case 1:
+            case 2:
                 return GuiInputResult.QuitGame;
             default:
                 return GuiInputResult.None;
@@ -50,7 +53,7 @@ public sealed class MenuGui : CenteredBoxGuiBase
     private GuiInputResult CycleSelection(int deltaY)
     {
         var startLeft = Console.WindowWidth / 2 - RowWidth / 2;
-        var firstRow = Console.WindowHeight / 2 - Rows.Length / 2 + 1;
+        var firstRow = Console.WindowHeight / 2 - Rows.Length / 2;
         Console.SetCursorPosition(startLeft, _optionIndex + firstRow);
         Erase.TextFromCursor(Selected.Length);
         CycleIndexAndWrap(deltaY);
