@@ -5,19 +5,52 @@ namespace VolcanoSimulator.Simulation;
 public sealed class LavaSimulator : EruptedMaterialSimulator<Lava>
 {
 
+    // https://link.springer.com/article/10.1007/s004450050299#:~:text=At%20flow%20velocities%20of%201,proximal%20regions%20of%20the%20channel.
+    // averages
+    private static readonly Speed FlowRate = Speed.FromMetersPerSecond(1.5);
+    private static readonly TemperatureDelta CoolingOverFirst2Km = TemperatureDelta.FromDegreesCelsius(13);
+    private static readonly TemperatureChangeRate TransportCooling = TemperatureChangeRate.FromDegreesCelsiusPerHour(36);
+
+    private static readonly Frequency MinCrystallizationRate = Frequency.FromCyclesPerHour(0.2);
+    private static readonly Frequency MaxCrystallizationRate = Frequency.FromCyclesPerHour(0.5);
+
+    private static Frequency RandomCrystallizationRate => new(
+        (MaxCrystallizationRate - MinCrystallizationRate).As(MinCrystallizationRate.Unit) * Random.Shared.NextDouble() + MinCrystallizationRate.Value,
+        MinCrystallizationRate.Unit
+    );
+
     private readonly List<City> _cities = [];
 
-    public static Speed FlowRate { get; } = Speed.FromKilometersPerHour(8); // TODO: interpolate using height
+    private double _previousTransportKm;
 
-    public static TemperatureChangeRate CoolingRate { get; } = TemperatureChangeRate.FromDegreesCelsiusPerHour(25);
+    private double TransportKm => Math.Sqrt(Math.Pow(Material.Width.Kilometers, 2) + Math.Pow(Material.Length.Kilometers, 2));
 
     public override void Step(SimulatorSession session, TimeSpan time)
     {
         if (Material.CanFlow)
             Material.Flow(FlowRate * time);
-        Material.Cool(CoolingRate * time);
+        Cool(time);
         if (!Material.HasDecayed)
             ClaimLives(session);
+        _previousTransportKm = TransportKm;
+    }
+
+    private void Cool(TimeSpan time)
+    {
+        var transport = TransportKm;
+        if (transport > _previousTransportKm)
+        {
+            var transportDelta = transport - _previousTransportKm;
+            if (_previousTransportKm < 2)
+                Material.Cool(transportDelta / 2 * CoolingOverFirst2Km);
+            else
+                Material.Cool(TransportCooling * time);
+        }
+
+        if (Material.CanFlow || Material.HasDecayed)
+            return;
+        var rate = RandomCrystallizationRate.PerSecond * time.TotalSeconds;
+        Material.Cool((Material.InitialTemperature - Lava.CoolTemperature) * rate);
     }
 
     private void ClaimLives(SimulatorSession session)

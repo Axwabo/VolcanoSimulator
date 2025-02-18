@@ -12,17 +12,20 @@ public sealed class Lava : EruptedMaterialBase
 
     public static Temperature MaxInitialTemperature { get; } = Temperature.FromDegreesCelsius(1200);
 
+    private readonly Temperature _initialTemperature;
+
     private readonly Angle _flowAngle;
 
     private Length _height;
 
     public required Temperature InitialTemperature
     {
+        get => _initialTemperature;
         init
         {
             if (value < MinInitialTemperature || value > MaxInitialTemperature)
                 throw new ArgumentOutOfRangeException(nameof(value), $"Initial temperature must be between {MinInitialTemperature} and {MaxInitialTemperature}");
-            CurrentTemperature = value;
+            _initialTemperature = CurrentTemperature = value;
         }
     }
 
