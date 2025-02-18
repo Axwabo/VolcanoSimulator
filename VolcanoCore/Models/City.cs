@@ -1,9 +1,7 @@
-﻿namespace VolcanoSimulator.Models;
+﻿namespace VolcanoCore.Models;
 
-public sealed class EvacuationShelter : LandmarkBase, IEvacuationLocation
+public sealed class City : NamedLandmark, IEvacuationLocation
 {
-
-    public required int ShelterCapacity { get; set; }
 
     public int AccommodatedPeople { get; private set; }
 
@@ -13,11 +11,11 @@ public sealed class EvacuationShelter : LandmarkBase, IEvacuationLocation
         AccommodatedPeople += people;
     }
 
-    public void Move(int people)
+    public void Kill(int people)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(people);
         if (people > AccommodatedPeople)
-            throw new ArgumentOutOfRangeException(nameof(people), "Cannot move more people than the amount already in the shelter.");
+            throw new InvalidOperationException("Cannot kill more people than there are accommodated");
         AccommodatedPeople -= people;
     }
 

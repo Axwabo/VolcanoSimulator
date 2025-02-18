@@ -1,6 +1,4 @@
-﻿using VolcanoSimulator.Models;
-
-namespace VolcanoSimulator.Rendering.Renderers;
+﻿namespace VolcanoSimulator.Rendering.Renderers;
 
 public sealed class CityRenderer : SymbolBasedRenderer
 {

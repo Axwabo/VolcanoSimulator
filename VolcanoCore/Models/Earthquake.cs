@@ -1,6 +1,4 @@
-﻿using UnitsNet;
-
-namespace VolcanoSimulator.Models;
+﻿namespace VolcanoCore.Models;
 
 public sealed class Earthquake
 {

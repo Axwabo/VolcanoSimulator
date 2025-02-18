@@ -1,5 +1,4 @@
-﻿using VolcanoSimulator.Models;
-using VolcanoSimulator.Rendering.Gui;
+﻿using VolcanoSimulator.Rendering.Gui;
 using VolcanoSimulator.Simulation;
 
 namespace VolcanoSimulator.Rendering;

@@ -1,5 +1,4 @@
-﻿using VolcanoSimulator.Models;
-using VolcanoSimulator.Rendering;
+﻿using VolcanoSimulator.Rendering;
 using VolcanoSimulator.Simulation;
 
 Console.CursorVisible = false;

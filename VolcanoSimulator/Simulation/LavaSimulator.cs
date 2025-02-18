@@ -1,6 +1,4 @@
-﻿using UnitsNet;
-using VolcanoSimulator.Models;
-using VolcanoSimulator.Rendering.Renderers;
+﻿using VolcanoSimulator.Rendering.Renderers;
 
 namespace VolcanoSimulator.Simulation;
 

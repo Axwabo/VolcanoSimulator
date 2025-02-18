@@ -1,6 +1,4 @@
-﻿using UnitsNet;
-using VolcanoSimulator.Models;
-using Color = (int R, int G, int B);
+﻿using Color = (int R, int G, int B);
 
 namespace VolcanoSimulator.Rendering;
 

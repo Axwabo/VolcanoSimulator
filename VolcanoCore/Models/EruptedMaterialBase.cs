@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Models;
+﻿namespace VolcanoCore.Models;
 
 public abstract class EruptedMaterialBase : IPositioned
 {

@@ -1,6 +1,4 @@
-﻿using VolcanoSimulator.Models;
-
-namespace VolcanoSimulator.Rendering;
+﻿namespace VolcanoSimulator.Rendering;
 
 public static class LandmarkInfoRenderingExtensions
 {

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using VolcanoSimulator.Models;
 
 namespace VolcanoSimulator.Simulation;
 

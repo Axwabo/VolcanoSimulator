@@ -1,6 +1,4 @@
-﻿using VolcanoSimulator.Models;
-
-namespace VolcanoSimulator.Simulation;
+﻿namespace VolcanoSimulator.Simulation;
 
 public static class CasualtyExtensions
 {

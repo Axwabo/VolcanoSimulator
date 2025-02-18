@@ -1,5 +1,4 @@
-﻿using VolcanoSimulator.Models;
-using VolcanoSimulator.Rendering.Gui.Inputs;
+﻿using VolcanoSimulator.Rendering.Gui.Inputs;
 
 namespace VolcanoSimulator.Rendering.Gui;
 

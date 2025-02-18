@@ -1,7 +1,4 @@
-﻿using UnitsNet;
-using VolcanoSimulator.Models;
-
-namespace VolcanoSimulator.Rendering.Renderers;
+﻿namespace VolcanoSimulator.Rendering.Renderers;
 
 public abstract class PositionedRenderer
 {

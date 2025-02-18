@@ -1,5 +1,4 @@
 ﻿using UnitsNet.Units;
-using VolcanoSimulator.Models;
 using VolcanoSimulator.Rendering.Renderers;
 
 namespace VolcanoSimulator.Rendering;
