@@ -23,7 +23,7 @@ public static class SurvivorGroupRenderingExtensions
     public static void DrawAll(this IEnumerable<SurvivorGroup> groups, RendererTable table, in ViewportRect viewport)
     {
         foreach (var group in groups)
-            table.GetRenderer(group).Clear(viewport);
+            table.GetRenderer(group).Draw(viewport);
     }
 
 }

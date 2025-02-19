@@ -17,8 +17,8 @@ public sealed class SurvivorGroupSimulator : ISimulator
     {
         var current = Group.Location;
         var target = Group.Target.Location;
-        var distance = Math.Sqrt(Coordinates.DistanceSquared(current, target));
-        var timeToTarget = TimeSpan.FromHours(distance / AmbulanceSpeed.KilometersPerHour);
+        var distance = Math.Sqrt(Coordinates.DistanceSquared(current, target)) * PositionedRenderer.PixelSize;
+        var timeToTarget = distance / AmbulanceSpeed;
         if (timeToTarget <= time)
         {
             Group.Target.Shelter(Group.People);

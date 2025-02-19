@@ -60,6 +60,7 @@ public sealed class SimulatorRenderer
             SelectedLandmark = null;
         }
 
+        Session.SurvivorGroups.ClearAll(CachedRenderers, viewport);
         Session.AllEruptedMaterials.ClearAll(CachedRenderers, viewport, _previousLayers);
         Session.Landmarks.ClearAll(CachedRenderers, viewport);
     }
@@ -71,6 +72,7 @@ public sealed class SimulatorRenderer
         if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui is not {AllowIndicators: false})
         {
             Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
+            Session.SurvivorGroups.DrawAll(CachedRenderers, viewport);
             Render.SelectionIndicator(center);
             landmark.DrawInfo();
             SelectedLandmark = landmark;
@@ -80,6 +82,7 @@ public sealed class SimulatorRenderer
         else
         {
             Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
+            Session.SurvivorGroups.DrawAll(CachedRenderers, viewport);
             Render.Cursor = center;
             Console.Write('+');
             CurrentGui?.Draw(this);

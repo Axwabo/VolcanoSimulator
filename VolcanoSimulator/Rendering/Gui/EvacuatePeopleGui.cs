@@ -26,7 +26,24 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key) => key.Key switch
     {
         ConsoleKey.W or ConsoleKey.A or ConsoleKey.S or ConsoleKey.D => GuiInputResult.Passthrough,
-        _ => GuiInputResult.None
+        ConsoleKey.Enter => BeginRescue(renderer),
+        _ => _people.ProcessInput(key)
     };
+
+    private GuiInputResult BeginRescue(SimulatorRenderer renderer)
+    {
+        var people = _people.Input.Value;
+        if (people == 0
+            || renderer.SelectedLandmark is not IEvacuationLocation location
+            || location.Capacity < location.AccommodatedPeople + people)
+            return GuiInputResult.None;
+        renderer.Session.RegisterSurvivorGroup(new SurvivorGroup
+        {
+            Location = Origin.Location,
+            People = people,
+            Target = location
+        });
+        return GuiInputResult.Exit;
+    }
 
 }
