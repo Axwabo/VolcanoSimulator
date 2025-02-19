@@ -14,6 +14,7 @@ public sealed class SimulatorRenderer
     private int _previousLocationLength;
     private int _previousEarthquakeLength;
     private MaterialLayer _previousLayers;
+    private ActionMode _previousMode;
 
     public SimulatorSession Session { get; }
 
@@ -28,6 +29,8 @@ public sealed class SimulatorRenderer
     public LandmarkBase? SelectedLandmark { get; set; }
 
     public MaterialLayer Layers { get; set; } = MaterialLayer.AshCloud | MaterialLayer.Lava;
+
+    public ActionMode Mode => (CurrentGui as IActionModeModifier)?.Mode ?? ActionMode.Normal;
 
     public SimulatorRenderer(SimulatorSession session)
     {
@@ -45,6 +48,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
+        Erase.Mode(_previousMode);
         Erase.SimulatorLocation(_previousLocationLength, _previousEarthquakeLength);
         Erase.SelectionIndicator(center);
         if (SelectedLandmark != null)
@@ -81,6 +85,8 @@ public sealed class SimulatorRenderer
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
         (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
         _previousLayers = Layers;
+        _previousMode = Mode;
+        Render.Mode(Mode);
     }
 
     public void Move(Coordinates delta)

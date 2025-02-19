@@ -6,6 +6,10 @@ namespace VolcanoSimulator.Rendering;
 public static class Render
 {
 
+    public const int ModeWidth = 6;
+    public const string ModePrefix = "-- ";
+    public const string ModeSuffix = " --";
+
     public static Coordinates Cursor
     {
         set => Console.SetCursorPosition(value.Longitude, value.Latitude);
@@ -56,6 +60,20 @@ public static class Render
         Console.Write(Math.Ceiling(earthquakeStrength.Newtons));
         Console.Write('N');
         return (left, Console.CursorLeft);
+    }
+
+    public static void Mode(ActionMode mode)
+    {
+        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        Console.Write(ModePrefix);
+        var text = mode.ToStringFast();
+        var pad = text.Length == ModeWidth - 2;
+        if (pad)
+            Console.Write(' ');
+        Console.Write(text);
+        if (pad)
+            Console.Write(' ');
+        Console.Write(ModeSuffix);
     }
 
 }

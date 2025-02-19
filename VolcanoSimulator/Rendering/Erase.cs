@@ -32,4 +32,10 @@ public static class Erase
         TextFromCursor(previousEarthquakeLength);
     }
 
+    public static void Mode(ActionMode mode)
+    {
+        Console.SetCursorPosition(Render.ModePrefix.Length, Console.WindowHeight - 1);
+        TextFromCursor(mode.ToStringFast().Length);
+    }
+
 }
