@@ -19,7 +19,9 @@ public sealed class SimulatorSession
 
     public IEnumerable<SurvivorGroup> SurvivorGroups => _simulators.Keys.OfType<SurvivorGroup>();
 
-    public IEnumerable<IPopulationReducible> PopulationReducibles => _simulators.Keys.OfType<IPopulationReducible>().Concat(Landmarks.OfType<IPopulationReducible>());
+    public IEnumerable<IPopulationReducible> PopulationReducibles => _simulators.Keys.OfType<IPopulationReducible>()
+        .Concat(Landmarks.OfType<IPopulationReducible>())
+        .Distinct();
 
     public void RefreshEruptedMaterial()
     {

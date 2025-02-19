@@ -15,24 +15,27 @@ public sealed class SurvivorGroupSimulator : ISimulator
 
     public void Step(SimulatorSession session, TimeSpan time)
     {
-        if (Group.People == 0)
+        if (Group.AccommodatedPeople == 0)
         {
             Active = false;
             return;
         }
 
         var current = Group.Location;
-        var target = Group.Target.Location;
-        var distance = Math.Sqrt(Coordinates.DistanceSquared(current, target)) * PositionedRenderer.PixelSize;
+        var target = Group.Target;
+        var targetLocation = target.Location;
+        var distance = Math.Sqrt(Coordinates.DistanceSquared(current, targetLocation)) * PositionedRenderer.PixelSize;
         var timeToTarget = distance / AmbulanceSpeed;
         if (timeToTarget <= time)
         {
-            Group.Target.Shelter(Group.People);
+            Group.Location = target.Location;
+            if (target.AccommodatedPeople + Group.AccommodatedPeople <= target.Capacity)
+                target.Shelter(Group.AccommodatedPeople);
             Active = false;
             return;
         }
 
-        var direction = Math.Atan2(target.Latitude - current.Latitude, target.Longitude - current.Longitude);
+        var direction = Math.Atan2(targetLocation.Latitude - current.Latitude, targetLocation.Longitude - current.Longitude);
         var step = AmbulanceSpeed * time;
         var stepX = step * Math.Cos(direction);
         var stepY = step * Math.Sin(direction);

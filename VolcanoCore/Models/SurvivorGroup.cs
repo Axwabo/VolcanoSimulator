@@ -1,12 +1,20 @@
 ﻿namespace VolcanoCore.Models;
 
-public sealed class SurvivorGroup : IPositioned
+public sealed class SurvivorGroup : IPopulationReducible
 {
 
     public required Coordinates Location { get; set; }
 
-    public required int People { get; init; }
+    public required int AccommodatedPeople { get; set; }
 
     public required IEvacuationLocation Target { get; init; }
+
+    public void Remove(int people)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(people);
+        if (people > AccommodatedPeople)
+            throw new ArgumentOutOfRangeException(nameof(people), "Cannot remove more people than there are in the group");
+        AccommodatedPeople -= people;
+    }
 
 }

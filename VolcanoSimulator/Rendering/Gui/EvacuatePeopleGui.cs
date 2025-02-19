@@ -43,7 +43,7 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
         renderer.Session.RegisterSurvivorGroup(new SurvivorGroup
         {
             Location = Origin.Location,
-            People = people,
+            AccommodatedPeople = people,
             Target = location
         });
         Console.CursorVisible = false;
