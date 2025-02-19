@@ -15,6 +15,12 @@ public sealed class SurvivorGroupSimulator : ISimulator
 
     public void Step(SimulatorSession session, TimeSpan time)
     {
+        if (Group.People == 0)
+        {
+            Active = false;
+            return;
+        }
+
         var current = Group.Location;
         var target = Group.Target.Location;
         var distance = Math.Sqrt(Coordinates.DistanceSquared(current, target)) * PositionedRenderer.PixelSize;
