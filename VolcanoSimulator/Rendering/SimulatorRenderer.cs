@@ -1,6 +1,8 @@
-﻿using VolcanoSimulator.Rendering.Gui;
+﻿using VolcanoSimulator.Rendering.Extensions;
+using VolcanoSimulator.Rendering.Gui;
 using VolcanoSimulator.Rendering.Renderers;
 using VolcanoSimulator.Simulation;
+using VolcanoSimulator.Simulation.Materials;
 
 namespace VolcanoSimulator.Rendering;
 

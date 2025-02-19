@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Simulation;
+﻿namespace VolcanoSimulator.Simulation.Materials;
 
 public abstract class EruptedMaterialSimulator<T> : ISimulator where T : EruptedMaterialBase
 {

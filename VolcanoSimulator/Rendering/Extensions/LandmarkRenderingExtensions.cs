@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using VolcanoSimulator.Rendering.Renderers;
+using VolcanoSimulator.Rendering.Renderers.Materials;
 
-namespace VolcanoSimulator.Rendering;
+namespace VolcanoSimulator.Rendering.Extensions;
 
 public static class LandmarkRenderingExtensions
 {

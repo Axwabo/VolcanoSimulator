@@ -1,6 +1,6 @@
 ﻿using VolcanoSimulator.Rendering.Renderers;
 
-namespace VolcanoSimulator.Simulation;
+namespace VolcanoSimulator.Simulation.Materials;
 
 public sealed class AshCloudSimulator : EruptedMaterialSimulator<AshCloud>
 {

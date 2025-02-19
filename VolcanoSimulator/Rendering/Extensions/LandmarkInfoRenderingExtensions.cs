@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Rendering;
+﻿namespace VolcanoSimulator.Rendering.Extensions;
 
 public static class LandmarkInfoRenderingExtensions
 {

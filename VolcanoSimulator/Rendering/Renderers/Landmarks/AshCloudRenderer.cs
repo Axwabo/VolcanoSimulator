@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Rendering.Renderers;
+﻿namespace VolcanoSimulator.Rendering.Renderers.Landmarks;
 
 public sealed class AshCloudRenderer : EruptedMaterialRenderer
 {

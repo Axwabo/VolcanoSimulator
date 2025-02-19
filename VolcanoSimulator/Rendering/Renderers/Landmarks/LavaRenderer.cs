@@ -1,4 +1,6 @@
-﻿namespace VolcanoSimulator.Rendering.Renderers;
+﻿using VolcanoSimulator.Rendering.Extensions;
+
+namespace VolcanoSimulator.Rendering.Renderers.Landmarks;
 
 public sealed class LavaRenderer : EruptedMaterialRenderer
 {

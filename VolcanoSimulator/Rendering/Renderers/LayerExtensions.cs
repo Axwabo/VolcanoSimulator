@@ -1,4 +1,6 @@
-﻿namespace VolcanoSimulator.Rendering.Renderers;
+﻿using VolcanoSimulator.Rendering.Renderers.Landmarks;
+
+namespace VolcanoSimulator.Rendering.Renderers;
 
 public static class LayerExtensions
 {

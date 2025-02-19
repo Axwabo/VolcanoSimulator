@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace VolcanoSimulator.Simulation;
+namespace VolcanoSimulator.Simulation.Materials;
 
 public static class EruptedMaterialSimulatingExtensions
 {

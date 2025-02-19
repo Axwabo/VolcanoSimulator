@@ -1,6 +1,6 @@
 ﻿using Color = (int R, int G, int B);
 
-namespace VolcanoSimulator.Rendering;
+namespace VolcanoSimulator.Rendering.Extensions;
 
 public static class LavaColor
 {

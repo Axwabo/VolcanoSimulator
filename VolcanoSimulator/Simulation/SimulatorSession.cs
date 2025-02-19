@@ -1,4 +1,6 @@
-﻿namespace VolcanoSimulator.Simulation;
+﻿using VolcanoSimulator.Simulation.Materials;
+
+namespace VolcanoSimulator.Simulation;
 
 public sealed class SimulatorSession
 {

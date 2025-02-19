@@ -1,6 +1,7 @@
 ﻿using VolcanoSimulator.Rendering.Renderers;
+using VolcanoSimulator.Rendering.Renderers.Landmarks;
 
-namespace VolcanoSimulator.Rendering;
+namespace VolcanoSimulator.Rendering.Extensions;
 
 public static class EruptedMaterialRenderingExtensions
 {

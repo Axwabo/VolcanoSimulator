@@ -1,4 +1,4 @@
-﻿namespace VolcanoSimulator.Rendering.Renderers;
+﻿namespace VolcanoSimulator.Rendering.Renderers.Materials;
 
 public abstract class LandmarkRenderer : PositionedRenderer
 {

@@ -1,6 +1,6 @@
 ﻿using VolcanoSimulator.Rendering.Renderers;
 
-namespace VolcanoSimulator.Rendering;
+namespace VolcanoSimulator.Rendering.Extensions;
 
 public static class SurvivorGroupRenderingExtensions
 {

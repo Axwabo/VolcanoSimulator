@@ -1,4 +1,5 @@
-﻿using VolcanoSimulator.Rendering.Gui;
+﻿using VolcanoSimulator.Rendering.Extensions;
+using VolcanoSimulator.Rendering.Gui;
 
 namespace VolcanoSimulator.Rendering;
 
