@@ -9,6 +9,8 @@ public static class LavaColor
     private static readonly Color Red = (255, 0, 0);
     private static readonly Color Orange = (255, 128, 0);
 
+    public static bool IsAnsiSupported { get; set; }
+
     public static void ColorBackground(Temperature temperature)
     {
         Color color;
@@ -20,6 +22,12 @@ public static class LavaColor
             color = InterpolateColor(CoolColor, Red, Lava.CoolTemperature, Lava.MinInitialTemperature, temperature);
         else
             color = InterpolateColor(Red, Orange, Lava.MinInitialTemperature, Lava.MaxInitialTemperature, temperature);
+        if (!IsAnsiSupported)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            return;
+        }
+
         Console.Write("\e[48;2;");
         Console.Write(color.R);
         Console.Write(";");

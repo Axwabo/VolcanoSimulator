@@ -1,7 +1,17 @@
-﻿using VolcanoSimulator.Rendering;
+﻿using VolcanoSimulator;
+using VolcanoSimulator.Rendering;
+using VolcanoSimulator.Rendering.Extensions;
 using VolcanoSimulator.Simulation;
 
 Console.CursorVisible = false;
+if (OperatingSystem.IsWindows() && !VirtualTerminalProcessing.EnableOutput())
+{
+    LavaColor.IsAnsiSupported = false;
+    Console.WriteLine("Failed to enable virtual output. Lava color will always be red.");
+    Console.WriteLine("Enter to continue...");
+    Console.ReadLine();
+}
+
 var session = new SimulatorSession
 {
     Landmarks =
