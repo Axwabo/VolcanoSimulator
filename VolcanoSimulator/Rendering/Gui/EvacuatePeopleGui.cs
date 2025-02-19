@@ -7,7 +7,7 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
 
     private const string Title = "Evacuate from ";
 
-    private readonly PrefixedInput<IntInputField> _people = new(new IntInputField(1, 2), "Group size: ");
+    private readonly PrefixedInput<IntInputField> _people = new(new IntInputField(5, 2), "Group size: ");
 
     public IEvacuationLocation Origin { get; }
 
@@ -19,7 +19,8 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
 
     public override void Draw(SimulatorRenderer renderer)
     {
-        Render.TextRight(0, Title, Origin is NamedLandmark {Name: var name} ? name : Origin.GetType().Name);
+        Console.CursorVisible = true;
+        Render.TextRight(4, Title, Origin is NamedLandmark {Name: var name} ? name : Origin.GetType().Name);
         _people.Draw(true);
     }
 
@@ -43,6 +44,7 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
             People = people,
             Target = location
         });
+        Console.CursorVisible = false;
         return GuiInputResult.Exit;
     }
 

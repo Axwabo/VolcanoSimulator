@@ -69,6 +69,8 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
+        var cursorLeft = -1;
+        var cursorTop = -1;
         if (Session.Landmarks.DrawAllAndTryGetSelected(CachedRenderers, viewport, center, out var landmark) && CurrentGui is not {AllowIndicators: false})
         {
             Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
@@ -77,7 +79,10 @@ public sealed class SimulatorRenderer
             landmark.DrawInfo();
             SelectedLandmark = landmark;
             if (CurrentGui is {AllowIndicators: true})
+            {
                 CurrentGui.Draw(this);
+                (cursorLeft, cursorTop) = Console.GetCursorPosition();
+            }
         }
         else
         {
@@ -86,12 +91,15 @@ public sealed class SimulatorRenderer
             Render.Cursor = center;
             Console.Write('+');
             CurrentGui?.Draw(this);
+            (cursorLeft, cursorTop) = Console.GetCursorPosition();
         }
 
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
         (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
         _previousLayers = Layers;
         _previousActionLength = Render.StatusBar(_previousMode = Mode, PrimaryAction);
+        if (cursorLeft != -1 && cursorTop != -1)
+            Console.SetCursorPosition(cursorLeft, cursorTop);
     }
 
     public void Move(Coordinates delta)
@@ -115,7 +123,9 @@ public sealed class SimulatorRenderer
             SelectedLandmark?.ClearInfo();
         Erase.StatusBar(_previousMode, _previousActionLength);
         gui?.Draw(this);
+        var (left, top) = Console.GetCursorPosition();
         Render.StatusBar(_previousMode = Mode, PrimaryAction);
+        Console.SetCursorPosition(left, top);
     }
 
 }
