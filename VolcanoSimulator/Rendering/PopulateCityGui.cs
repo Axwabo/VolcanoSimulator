@@ -31,10 +31,10 @@ public sealed class PopulateCityGui : GuiBase, IActionModeModifier
             return GuiInputResult.None;
         }
 
+        Console.CursorVisible = false;
         if (_input.Input.Value == 0)
             return GuiInputResult.Exit;
         _city.Shelter(_input.Input.Value);
-        Console.CursorVisible = false;
         return GuiInputResult.Exit;
     }
 
