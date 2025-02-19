@@ -15,6 +15,7 @@ public sealed class SimulatorRenderer
     private int _previousEarthquakeLength;
     private MaterialLayer _previousLayers;
     private ActionMode _previousMode;
+    private int _previousActionLength;
 
     public SimulatorSession Session { get; }
 
@@ -32,6 +33,8 @@ public sealed class SimulatorRenderer
 
     public ActionMode Mode => (CurrentGui as IActionModeModifier)?.Mode ?? ActionMode.Normal;
 
+    public string? PrimaryAction => (CurrentGui as IActionModeModifier)?.PrimaryAction ?? SelectedLandmark.GetNormalAction();
+
     public SimulatorRenderer(SimulatorSession session)
     {
         Session = session;
@@ -48,7 +51,7 @@ public sealed class SimulatorRenderer
     {
         var viewport = Viewport;
         var center = viewport.Size / 2;
-        Erase.Mode(_previousMode);
+        Erase.StatusBar(_previousMode, _previousActionLength);
         Erase.SimulatorLocation(_previousLocationLength, _previousEarthquakeLength);
         Erase.SelectionIndicator(center);
         if (SelectedLandmark != null)
@@ -85,7 +88,7 @@ public sealed class SimulatorRenderer
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
         (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
         _previousLayers = Layers;
-        Render.Mode(_previousMode = Mode);
+        _previousActionLength = Render.StatusBar(_previousMode = Mode, PrimaryAction);
     }
 
     public void Move(Coordinates delta)
@@ -107,8 +110,9 @@ public sealed class SimulatorRenderer
 
         if (gui is {AllowIndicators: false})
             SelectedLandmark?.ClearInfo();
-        Render.Mode(_previousMode = Mode);
+        Erase.StatusBar(_previousMode, _previousActionLength);
         gui?.Draw(this);
+        Render.StatusBar(_previousMode = Mode, PrimaryAction);
     }
 
 }

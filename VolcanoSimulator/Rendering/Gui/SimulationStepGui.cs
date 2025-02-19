@@ -36,6 +36,7 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
         SetColor(MaterialLayer.AshCloud);
         Console.Write("[C]louds");
         Console.ResetColor();
+        PrimaryAction = renderer.SelectedLandmark is IEvacuationLocation {AccommodatedPeople: not 0} ? "[ENTER] Evacuate people" : "[SPACE] Step";
     }
 
     private void SetColor(MaterialLayer highlighted) => Console.ForegroundColor = _layers.HasFlagFast(highlighted) ? ConsoleColor.White : ConsoleColor.DarkGray;
@@ -43,8 +44,8 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key) => key.Key switch
     {
         ConsoleKey.Escape => ShowMenu(renderer),
-        ConsoleKey.Enter => Step(renderer),
-        ConsoleKey.Spacebar => AdjustStep(renderer),
+        ConsoleKey.Enter => Evacuate(renderer),
+        ConsoleKey.Spacebar => Step(renderer),
         ConsoleKey.L => ToggleLayer(renderer, MaterialLayer.Lava),
         ConsoleKey.C => ToggleLayer(renderer, MaterialLayer.AshCloud),
         ConsoleKey.E or ConsoleKey.V or ConsoleKey.Delete => GuiInputResult.None,
@@ -54,6 +55,12 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
     private GuiInputResult ShowMenu(SimulatorRenderer renderer)
     {
         renderer.ShowGui(new MenuGui {Parent = this});
+        return GuiInputResult.None;
+    }
+
+    private GuiInputResult Evacuate(SimulatorRenderer renderer)
+    {
+        // TODO
         return GuiInputResult.None;
     }
 

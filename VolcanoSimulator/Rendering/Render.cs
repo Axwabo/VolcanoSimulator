@@ -62,7 +62,7 @@ public static class Render
         return (left, Console.CursorLeft);
     }
 
-    public static void Mode(ActionMode mode)
+    public static int StatusBar(ActionMode mode, string? primaryAction)
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         Console.Write(ModePrefix);
@@ -74,6 +74,10 @@ public static class Render
         if (pad)
             Console.Write(' ');
         Console.Write(ModeSuffix);
+        if (string.IsNullOrEmpty(primaryAction))
+            return 0;
+        TextRight(Console.WindowHeight - 1, primaryAction);
+        return primaryAction.Length;
     }
 
 }
