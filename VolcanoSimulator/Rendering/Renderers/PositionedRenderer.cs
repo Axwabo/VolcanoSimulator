@@ -5,7 +5,7 @@ public abstract class PositionedRenderer
 
     public static Length PixelSize { get; } = Length.FromHectometers(1);
 
-    public IPositioned Positioned { get; }
+    protected IPositioned Positioned { get; }
 
     protected PositionedRenderer(IPositioned positioned) => Positioned = positioned;
 

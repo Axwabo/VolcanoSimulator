@@ -5,7 +5,7 @@ public class SymbolBasedRenderer : LandmarkRenderer
 
     public char Symbol { get; }
 
-    public SymbolBasedRenderer(LandmarkBase landmark, char symbol) : base(landmark) => Symbol = symbol;
+    protected SymbolBasedRenderer(LandmarkBase landmark, char symbol) : base(landmark) => Symbol = symbol;
 
     public override void Draw(in ViewportRect viewport)
     {

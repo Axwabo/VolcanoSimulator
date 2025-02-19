@@ -15,6 +15,8 @@ public sealed class SimulatorSession
 
     public IEnumerable<EarthquakeSimulator> EarthquakeSimulators => _simulators.Values.OfType<EarthquakeSimulator>();
 
+    public IEnumerable<SurvivorGroup> SurvivorGroups => _simulators.Keys.OfType<SurvivorGroup>();
+
     public void RefreshEruptedMaterial()
     {
         foreach (var volcano in Landmarks.OfType<Volcano>())
