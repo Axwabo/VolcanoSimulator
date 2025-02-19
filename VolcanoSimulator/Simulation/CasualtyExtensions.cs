@@ -9,12 +9,12 @@ public static class CasualtyExtensions
         ArgumentOutOfRangeException.ThrowIfGreaterThan(rate, 1);
     }
 
-    public static void KillPercentage(this ICasualtyHandler handler, double rate)
+    public static void KillPercentage(this IPopulationReducible population, double rate)
     {
         ValidateRate(rate);
-        var casualties = (int) (handler.AccommodatedPeople * rate);
+        var casualties = (int) (population.AccommodatedPeople * rate);
         if (casualties != 0)
-            handler.Remove(casualties);
+            population.Remove(casualties);
     }
 
 }

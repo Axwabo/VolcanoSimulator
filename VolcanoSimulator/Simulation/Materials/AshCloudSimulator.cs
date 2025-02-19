@@ -9,7 +9,7 @@ public sealed class AshCloudSimulator : EruptedMaterialSimulator<AshCloud>
 
     private static readonly Density FatalDensity = Density.FromGramsPerCubicMeter(10);
 
-    private readonly List<City> _cities = [];
+    private readonly List<IPopulationReducible> _populationCache = [];
 
     public override void Step(SimulatorSession session, TimeSpan time)
     {
@@ -21,7 +21,7 @@ public sealed class AshCloudSimulator : EruptedMaterialSimulator<AshCloud>
     private void ClaimLives(SimulatorSession session)
     {
         var rate = Math.Clamp((Material.CurrentDensity - AshCloud.SafeDensity) / FatalDensity, 0, 1);
-        using var handler = new UniformCasualtyHandler(rate, _cities, session);
+        using var handler = new UniformCasualtyHandler(rate, _populationCache, session);
         var sizePixels = (int) Math.Ceiling(Material.Radius / PositionedRenderer.PixelSize);
         var origin = Material.Location;
         var (startX, startY) = (origin.Longitude - sizePixels, origin.Latitude - sizePixels);

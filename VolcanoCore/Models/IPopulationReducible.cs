@@ -1,6 +1,6 @@
 ﻿namespace VolcanoCore.Models;
 
-public interface ICasualtyHandler
+public interface IPopulationReducible : IPositioned
 {
 
     int AccommodatedPeople { get; }

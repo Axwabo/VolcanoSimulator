@@ -33,7 +33,9 @@ public sealed class SimulatorRenderer
 
     public ActionMode Mode => (CurrentGui as IActionModeModifier)?.Mode ?? ActionMode.Normal;
 
-    public string? PrimaryAction => (CurrentGui as IActionModeModifier)?.PrimaryAction ?? SelectedLandmark.GetNormalAction();
+    public string? PrimaryAction => CurrentGui is IActionModeModifier modifier
+        ? modifier.PrimaryAction
+        : SelectedLandmark?.GetNormalAction();
 
     public SimulatorRenderer(SimulatorSession session)
     {

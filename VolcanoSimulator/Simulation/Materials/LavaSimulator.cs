@@ -19,7 +19,7 @@ public sealed class LavaSimulator : EruptedMaterialSimulator<Lava>
         MinCrystallizationRate.Unit
     );
 
-    private readonly List<City> _cities = [];
+    private readonly List<IPopulationReducible> _populationCache = [];
 
     private double _previousTransportKm;
 
@@ -55,7 +55,7 @@ public sealed class LavaSimulator : EruptedMaterialSimulator<Lava>
 
     private void ClaimLives(SimulatorSession session)
     {
-        using var handler = new UniformCasualtyHandler(1, _cities, session);
+        using var handler = new UniformCasualtyHandler(1, _populationCache, session);
         var (startY, startX) = Material.Location;
         var endX = startX + (int) (Material.Width / PositionedRenderer.PixelSize);
         var endY = startY + (int) (Material.Length / PositionedRenderer.PixelSize);

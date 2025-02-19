@@ -1,6 +1,6 @@
 ﻿namespace VolcanoCore.Models;
 
-public sealed class City : NamedLandmark, IEvacuationLocation, ICasualtyHandler
+public sealed class City : NamedLandmark, IEvacuationLocation, IPopulationReducible
 {
 
     public int AccommodatedPeople { get; private set; }
