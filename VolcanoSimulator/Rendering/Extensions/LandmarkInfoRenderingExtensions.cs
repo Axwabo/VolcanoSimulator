@@ -20,8 +20,8 @@ public static class LandmarkInfoRenderingExtensions
         if (landmark is not IEvacuationLocation evacuationLocation)
             return;
         Erase.TextRight(row++, People.Length + IntLength(evacuationLocation.AccommodatedPeople));
-        if (evacuationLocation.ShelterCapacity != int.MaxValue)
-            Erase.TextRight(row, Capacity.Length + IntLength(evacuationLocation.ShelterCapacity));
+        if (evacuationLocation.Capacity != int.MaxValue)
+            Erase.TextRight(row, Capacity.Length + IntLength(evacuationLocation.Capacity));
     }
 
     public static void DrawInfo(this LandmarkBase landmark)
@@ -36,8 +36,8 @@ public static class LandmarkInfoRenderingExtensions
         if (landmark is not IEvacuationLocation evacuationLocation)
             return;
         Render.TextRight(row++, People, evacuationLocation.AccommodatedPeople.ToString());
-        if (evacuationLocation.ShelterCapacity != int.MaxValue)
-            Render.TextRight(row, Capacity, evacuationLocation.ShelterCapacity.ToString());
+        if (evacuationLocation.Capacity != int.MaxValue)
+            Render.TextRight(row, Capacity, evacuationLocation.Capacity.ToString());
     }
 
     public static bool TryClearSelectedLandmark(this SimulatorRenderer renderer)

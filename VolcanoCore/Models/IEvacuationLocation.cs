@@ -5,7 +5,7 @@ public interface IEvacuationLocation : IPositioned
 
     int AccommodatedPeople { get; }
 
-    int ShelterCapacity => int.MaxValue;
+    int Capacity => int.MaxValue;
 
     void Shelter(int people);
 

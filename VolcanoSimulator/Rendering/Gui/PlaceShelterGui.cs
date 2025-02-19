@@ -27,7 +27,7 @@ public sealed class PlaceShelterGui : PlaceLandmarkGuiBase
         var shelter = new EvacuationShelter
         {
             Location = GetPlaceLocation(renderer.Viewport),
-            ShelterCapacity = value
+            Capacity = value
         };
         renderer.Session.Landmarks.Add(shelter);
         return Exit();

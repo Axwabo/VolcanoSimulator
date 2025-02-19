@@ -3,10 +3,10 @@
 public static class InputExtensions
 {
 
-    private static readonly Coordinates Up = new((int) -1, (int) 0);
-    private static readonly Coordinates Down = new((int) 1, (int) 0);
-    private static readonly Coordinates Left = new((int) 0, (int) -1);
-    private static readonly Coordinates Right = new((int) 0, (int) 1);
+    private static readonly Coordinates Up = new(-1, 0);
+    private static readonly Coordinates Down = new(1, 0);
+    private static readonly Coordinates Left = new(0, -1);
+    private static readonly Coordinates Right = new(0, 1);
 
     public static bool TryGetMovementDelta(this ConsoleKey key, out Coordinates coordinates)
     {

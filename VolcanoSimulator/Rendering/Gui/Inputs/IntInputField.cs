@@ -1,6 +1,6 @@
 ﻿namespace VolcanoSimulator.Rendering.Gui.Inputs;
 
-public class IntInputField : InputField
+public sealed class IntInputField : InputField
 {
 
     public IntInputField(int row, int maxLength) : base(row, maxLength) => Append('0');

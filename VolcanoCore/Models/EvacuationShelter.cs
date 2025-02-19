@@ -3,7 +3,7 @@
 public sealed class EvacuationShelter : LandmarkBase, IEvacuationLocation
 {
 
-    public required int ShelterCapacity { get; set; }
+    public required int Capacity { get; init; }
 
     public int AccommodatedPeople { get; private set; }
 
