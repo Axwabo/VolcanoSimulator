@@ -9,7 +9,7 @@ public static class LavaColor
     private static readonly Color Red = (255, 0, 0);
     private static readonly Color Orange = (255, 128, 0);
 
-    public static bool IsAnsiSupported { get; set; }
+    public static bool IsAnsiSupported { get; set; } = true;
 
     public static void ColorBackground(Temperature temperature)
     {
