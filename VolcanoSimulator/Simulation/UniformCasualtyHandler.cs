@@ -11,7 +11,7 @@ public readonly ref struct UniformCasualtyHandler : IDisposable
         CasualtyExtensions.ValidateRate(rate);
         _rate = rate;
         _populationCache = populationCache;
-        _populationCache.AddRange(session.Landmarks.OfType<City>());
+        _populationCache.AddRange(session.PopulationReducibles);
     }
 
     public void Process(in Coordinates location)

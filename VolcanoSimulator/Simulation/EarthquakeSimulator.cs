@@ -28,11 +28,11 @@ public sealed class EarthquakeSimulator : ISimulator
     public void Step(SimulatorSession session, TimeSpan time)
     {
         var casualtyChance = Earthquake.Strength.Newtons / 5000;
-        foreach (var city in session.Landmarks.OfType<City>())
+        foreach (var populationReducible in session.PopulationReducibles)
         {
-            var strength = GetStrengthMultiplier(city.Location);
+            var strength = GetStrengthMultiplier(populationReducible.Location);
             if (strength != 0)
-                city.KillPercentage(casualtyChance * Random.Shared.NextDouble() * strength);
+                populationReducible.KillPercentage(casualtyChance * Random.Shared.NextDouble() * strength);
         }
 
         _remainingTime -= time;
