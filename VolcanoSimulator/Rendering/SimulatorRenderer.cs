@@ -72,14 +72,14 @@ public sealed class SimulatorRenderer
             landmark.DrawInfo();
             SelectedLandmark = landmark;
             if (CurrentGui is {AllowIndicators: true})
-                CurrentGui.Draw();
+                CurrentGui.Draw(this);
         }
         else
         {
             Session.AllEruptedMaterials.DrawAll(CachedRenderers, viewport, Layers);
             Render.Cursor = center;
             Console.Write('+');
-            CurrentGui?.Draw();
+            CurrentGui?.Draw(this);
         }
 
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
@@ -108,7 +108,7 @@ public sealed class SimulatorRenderer
         if (gui is {AllowIndicators: false})
             SelectedLandmark?.ClearInfo();
         Render.Mode(_previousMode = Mode);
-        gui?.Draw();
+        gui?.Draw(this);
     }
 
 }

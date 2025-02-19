@@ -12,7 +12,7 @@ public sealed class PlaceVolcanoGui : PlaceLandmarkGuiBase
 
     private bool _indexActive;
 
-    public override void Draw()
+    public override void Draw(SimulatorRenderer renderer)
     {
         Console.CursorVisible = true;
         Render.TextRight(0, Title);

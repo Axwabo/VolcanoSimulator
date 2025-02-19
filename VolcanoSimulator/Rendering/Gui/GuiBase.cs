@@ -7,7 +7,7 @@ public abstract class GuiBase
 
     public virtual bool AllowIndicators => false;
 
-    public abstract void Draw();
+    public abstract void Draw(SimulatorRenderer renderer);
 
     public abstract GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key);
 

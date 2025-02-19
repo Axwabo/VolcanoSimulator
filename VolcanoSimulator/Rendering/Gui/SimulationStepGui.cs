@@ -20,7 +20,9 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
 
     public ActionMode Mode => ActionMode.Step;
 
-    public override void Draw()
+    public string? PrimaryAction { get; private set; }
+
+    public override void Draw(SimulatorRenderer renderer)
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 2);
         Console.Write("Time step: ");
@@ -42,7 +44,7 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
     {
         ConsoleKey.Escape => ShowMenu(renderer),
         ConsoleKey.Enter => Step(renderer),
-        ConsoleKey.Spacebar => AdjustStep(),
+        ConsoleKey.Spacebar => AdjustStep(renderer),
         ConsoleKey.L => ToggleLayer(renderer, MaterialLayer.Lava),
         ConsoleKey.C => ToggleLayer(renderer, MaterialLayer.AshCloud),
         ConsoleKey.E or ConsoleKey.V or ConsoleKey.Delete => GuiInputResult.None,
@@ -61,12 +63,12 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
         return renderer.Session.AnyActive ? GuiInputResult.FullRedraw : GuiInputResult.Exit;
     }
 
-    private GuiInputResult AdjustStep()
+    private GuiInputResult AdjustStep(SimulatorRenderer renderer)
     {
         _step *= 10;
         if (_step > MaxTimeStep)
             _step = MinTimeStep;
-        Draw();
+        Draw(renderer);
         return GuiInputResult.None;
     }
 

@@ -9,7 +9,7 @@ public sealed class PlaceShelterGui : PlaceLandmarkGuiBase
 
     private readonly PrefixedInput<IntInputField> _capacity = new(new IntInputField(1, 8), "Capacity: ");
 
-    public override void Draw()
+    public override void Draw(SimulatorRenderer renderer)
     {
         Console.CursorVisible = true;
         Render.TextRight(0, Title);

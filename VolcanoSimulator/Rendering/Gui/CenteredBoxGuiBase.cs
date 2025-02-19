@@ -18,7 +18,7 @@ public abstract class CenteredBoxGuiBase : GuiBase
         return option.Length + 1;
     }
 
-    public override void Draw()
+    public override void Draw(SimulatorRenderer renderer)
     {
         var row = Console.WindowHeight / 2 - Rows.Length / 2 - 1;
         var center = Console.WindowWidth / 2;

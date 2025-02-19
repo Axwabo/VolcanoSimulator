@@ -12,7 +12,7 @@ public sealed class PlaceCityGui : PlaceLandmarkGuiBase
 
     private bool _peopleActive;
 
-    public override void Draw()
+    public override void Draw(SimulatorRenderer renderer)
     {
         Console.CursorVisible = true;
         Render.TextRight(0, Title);
