@@ -7,6 +7,7 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
 
     private const string TimeStep = "Time step: ";
     private const string Padding = "   ";
+    private const string People = "People: ";
 
     private static readonly TimeSpan[] TimeStepPresets =
     [
@@ -29,6 +30,10 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
     private TimeSpan _step;
 
     private MaterialLayer _layers;
+
+    private SurvivorGroup? _highlightedGroup;
+
+    private int _previousPeopleLength;
 
     public SimulationStepGui(MaterialLayer layers)
     {
@@ -59,6 +64,29 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
         Console.Write("[C]louds");
         Console.ResetColor();
         PrimaryAction = renderer.SelectedLandmark is IEvacuationLocation {AccommodatedPeople: not 0} ? "[ENTER] Evacuate people" : "[SPACE] Step";
+        if (_previousPeopleLength != 0)
+        {
+            Erase.TextRight(Console.WindowHeight - 3, nameof(SurvivorGroup).Length);
+            Erase.TextRight(Console.WindowHeight - 2, People.Length + (int) Math.Log10(_previousPeopleLength) + 1);
+            _previousPeopleLength = 0;
+        }
+
+        var viewport = renderer.Viewport;
+        var center = viewport.Size / 2;
+        _highlightedGroup = renderer.Session.SurvivorGroups.FirstOrDefault(e => viewport.TryTransform(e.Location, out var coordinates) && coordinates == center);
+        if (_highlightedGroup != null)
+        {
+            Render.Cursor = center;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.Write(' ');
+            Console.ResetColor();
+            Render.TextRight(Console.WindowHeight - 3, nameof(SurvivorGroup));
+            var people = _highlightedGroup.AccommodatedPeople.ToString();
+            _previousPeopleLength = people.Length;
+            Render.TextRight(Console.WindowHeight - 2, People, people);
+            PrimaryAction = "[ENTER] Change target shelter";
+        }
+
         DisplayCursor();
     }
 
