@@ -12,9 +12,13 @@ public sealed class ControlsGui : CenteredBoxGuiBase
         "E: Place shelter",
         "C: place city",
         "V: Place volcano",
+        "-- INSERT --",
+        "↑/↓: Switch inputs",
         "-- STEP --",
         "I: Increase time",
-        "Space: Simulate step"
+        "Space: Simulate step",
+        "L: Toggle lava",
+        "C: Toggle ash clouds"
     ];
 
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
