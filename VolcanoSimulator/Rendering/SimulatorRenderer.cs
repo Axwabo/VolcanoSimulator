@@ -85,8 +85,7 @@ public sealed class SimulatorRenderer
         var strength = Session.GetTotalEarthquakeStrengthAt(_viewLocation + viewport.Size / 2);
         (_previousLocationLength, _previousEarthquakeLength) = Render.SimulatorInfo(viewport, _viewLocation, strength);
         _previousLayers = Layers;
-        _previousMode = Mode;
-        Render.Mode(Mode);
+        Render.Mode(_previousMode = Mode);
     }
 
     public void Move(Coordinates delta)
@@ -108,6 +107,7 @@ public sealed class SimulatorRenderer
 
         if (gui is {AllowIndicators: false})
             SelectedLandmark?.ClearInfo();
+        Render.Mode(_previousMode = Mode);
         gui?.Draw();
     }
 

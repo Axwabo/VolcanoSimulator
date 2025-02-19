@@ -2,7 +2,7 @@
 
 namespace VolcanoSimulator.Rendering.Gui;
 
-public sealed class PlaceCityGui : GuiBase
+public sealed class PlaceCityGui : PlaceLandmarkGuiBase
 {
 
     private const string Title = "Place city";
@@ -23,11 +23,7 @@ public sealed class PlaceCityGui : GuiBase
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
     {
         if (key.Key == ConsoleKey.Escape)
-        {
-            Console.CursorVisible = false;
-            return GuiInputResult.Exit;
-        }
-
+            return Exit();
         if (key.Key is ConsoleKey.UpArrow or ConsoleKey.DownArrow)
         {
             _peopleActive = !_peopleActive;
@@ -38,18 +34,16 @@ public sealed class PlaceCityGui : GuiBase
         var result = (_peopleActive ? (IInputField) _peopleInput : _nameInput).ProcessInput(key);
         if (result != GuiInputResult.Exit)
             return GuiInputResult.None;
-        var viewport = renderer.Viewport;
         var city = new City
         {
-            Location = new Coordinates(viewport.Y + viewport.Height / 2, viewport.X + viewport.Width / 2),
+            Location = GetPlaceLocation(renderer.Viewport),
             Name = _nameInput.Input.Text.ToString()
         };
         var people = _peopleInput.Input.Value;
         if (people != 0)
             city.Shelter(people);
         renderer.Session.Landmarks.Add(city);
-        Console.CursorVisible = false;
-        return GuiInputResult.Exit;
+        return Exit();
     }
 
 }

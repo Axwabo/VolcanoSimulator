@@ -2,7 +2,7 @@
 
 namespace VolcanoSimulator.Rendering.Gui;
 
-public sealed class SimulationStepGui : GuiBase
+public sealed class SimulationStepGui : GuiBase, IActionModeModifier
 {
 
     private const string Padding = "   ";
@@ -18,11 +18,14 @@ public sealed class SimulationStepGui : GuiBase
 
     public override bool AllowIndicators => true;
 
+    public ActionMode Mode => ActionMode.Step;
+
     public override void Draw()
     {
-        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        Console.SetCursorPosition(0, Console.WindowHeight - 2);
         Console.Write("Time step: ");
         Console.Write(_step);
+        Console.SetCursorPosition(Render.ModeWidth + Render.ModePrefix.Length + Render.ModeSuffix.Length, Console.WindowHeight - 1);
         Console.Write(Padding);
         SetColor(MaterialLayer.Lava);
         Console.Write("[L]ava");

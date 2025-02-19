@@ -2,7 +2,7 @@
 
 namespace VolcanoSimulator.Rendering.Gui;
 
-public sealed class PlaceShelterGui : GuiBase
+public sealed class PlaceShelterGui : PlaceLandmarkGuiBase
 {
 
     private const string Title = "Place evacuation shelter";
@@ -19,24 +19,18 @@ public sealed class PlaceShelterGui : GuiBase
     public override GuiInputResult ProcessInput(SimulatorRenderer renderer, in ConsoleKeyInfo key)
     {
         if (key.Key == ConsoleKey.Escape)
-        {
-            Console.CursorVisible = false;
-            return GuiInputResult.Exit;
-        }
-
+            return Exit();
         var result = _capacity.ProcessInput(key);
         var value = _capacity.Input.Value;
         if (result != GuiInputResult.Exit || value == 0)
             return GuiInputResult.None;
-        var viewport = renderer.Viewport;
         var shelter = new EvacuationShelter
         {
-            Location = new Coordinates(viewport.Y + viewport.Height / 2, viewport.X + viewport.Width / 2),
+            Location = GetPlaceLocation(renderer.Viewport),
             ShelterCapacity = value
         };
         renderer.Session.Landmarks.Add(shelter);
-        Console.CursorVisible = false;
-        return GuiInputResult.Exit;
+        return Exit();
     }
 
 }
