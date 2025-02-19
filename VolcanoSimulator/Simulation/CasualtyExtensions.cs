@@ -14,7 +14,7 @@ public static class CasualtyExtensions
         ValidateRate(rate);
         var casualties = (int) (city.AccommodatedPeople * rate);
         if (casualties != 0)
-            city.Kill(casualties);
+            city.Remove(casualties);
     }
 
 }

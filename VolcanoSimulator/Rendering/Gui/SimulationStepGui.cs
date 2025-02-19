@@ -58,9 +58,11 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
         return GuiInputResult.None;
     }
 
-    private GuiInputResult Evacuate(SimulatorRenderer renderer)
+    private static GuiInputResult Evacuate(SimulatorRenderer renderer)
     {
-        // TODO
+        if (renderer.SelectedLandmark is not IEvacuationLocation {AccommodatedPeople: not 0} location)
+            return GuiInputResult.None;
+        renderer.ShowGui(new EvacuatePeopleGui(location));
         return GuiInputResult.None;
     }
 

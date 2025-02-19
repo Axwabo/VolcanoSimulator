@@ -9,4 +9,6 @@ public interface IEvacuationLocation : IPositioned
 
     void Shelter(int people);
 
+    void Remove(int people);
+
 }

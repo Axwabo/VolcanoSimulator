@@ -13,11 +13,11 @@ public sealed class EvacuationShelter : LandmarkBase, IEvacuationLocation
         AccommodatedPeople += people;
     }
 
-    public void Move(int people)
+    public void Remove(int people)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(people);
         if (people > AccommodatedPeople)
-            throw new ArgumentOutOfRangeException(nameof(people), "Cannot move more people than the amount already in the shelter.");
+            throw new InvalidOperationException("Cannot remove more people than there are accommodated");
         AccommodatedPeople -= people;
     }
 
