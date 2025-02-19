@@ -73,7 +73,7 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
 
         var viewport = renderer.Viewport;
         var center = viewport.Size / 2;
-        _highlightedGroup = renderer.Session.SurvivorGroups.FirstOrDefault(e => viewport.TryTransform(e.Location, out var coordinates) && coordinates == center);
+        _highlightedGroup = renderer.Session.SurvivorGroups.FirstOrDefault(e => e.AccommodatedPeople != 0 && viewport.TryTransform(e.Location, out var coordinates) && coordinates == center);
         if (_highlightedGroup != null)
         {
             Render.Cursor = center;
