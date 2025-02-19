@@ -29,9 +29,12 @@ public sealed class SurvivorGroupSimulator : ISimulator
         if (timeToTarget <= time)
         {
             Group.Location = target.Location;
-            if (target.AccommodatedPeople + Group.AccommodatedPeople <= target.Capacity)
-                target.Shelter(Group.AccommodatedPeople);
-            Active = false;
+            var add = target.Capacity - Group.AccommodatedPeople;
+            if (add < 0)
+                return;
+            target.Shelter(add);
+            Group.Remove(add);
+            Active = Group.AccommodatedPeople != 0;
             return;
         }
 
