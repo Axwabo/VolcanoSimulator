@@ -10,6 +10,8 @@ public sealed class EvacuationShelter : LandmarkBase, IEvacuationLocation
     public void Shelter(int people)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(people);
+        if (AccommodatedPeople + people > Capacity)
+            throw new InvalidOperationException("Cannot shelter more people than the shelter's capacity");
         AccommodatedPeople += people;
     }
 
