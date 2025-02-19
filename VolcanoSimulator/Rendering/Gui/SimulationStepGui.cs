@@ -148,6 +148,12 @@ public sealed class SimulationStepGui : GuiBase, IActionModeModifier
 
     private GuiInputResult Evacuate(SimulatorRenderer renderer)
     {
+        if (_highlightedGroup != null)
+        {
+            renderer.ShowGui(new ChangeEvacuationTargetGui(_highlightedGroup) {Parent = this});
+            return GuiInputResult.None;
+        }
+
         if (renderer.SelectedLandmark is not IEvacuationLocation {AccommodatedPeople: not 0} location)
             return GuiInputResult.None;
         renderer.ShowGui(new EvacuatePeopleGui(location) {Parent = this});

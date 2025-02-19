@@ -7,7 +7,7 @@ public sealed class SurvivorGroup : IPopulationReducible
 
     public required int AccommodatedPeople { get; set; }
 
-    public required IEvacuationLocation Target { get; init; }
+    public required IEvacuationLocation Target { get; set; }
 
     public void Remove(int people)
     {
