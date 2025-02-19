@@ -35,9 +35,11 @@ public sealed class EvacuatePeopleGui : GuiBase, IActionModeModifier
     {
         var people = _people.Input.Value;
         if (people == 0
+            || Origin.AccommodatedPeople < people
             || renderer.SelectedLandmark is not IEvacuationLocation location
             || location.Capacity < location.AccommodatedPeople + people)
             return GuiInputResult.None;
+        Origin.Remove(people);
         renderer.Session.RegisterSurvivorGroup(new SurvivorGroup
         {
             Location = Origin.Location,

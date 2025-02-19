@@ -1,9 +1,11 @@
 ﻿namespace VolcanoCore.Models;
 
-public sealed class City : NamedLandmark, IEvacuationLocation
+public sealed class City : NamedLandmark, IEvacuationLocation, ICasualtyHandler
 {
 
     public int AccommodatedPeople { get; private set; }
+
+    public int Capacity => int.MaxValue;
 
     public void Shelter(int people)
     {
