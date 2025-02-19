@@ -12,16 +12,16 @@ public static class InputExtensions
     {
         switch (key)
         {
-            case ConsoleKey.UpArrow or ConsoleKey.W:
+            case ConsoleKey.W:
                 coordinates = Up;
                 return true;
-            case ConsoleKey.DownArrow or ConsoleKey.S:
+            case ConsoleKey.S:
                 coordinates = Down;
                 return true;
-            case ConsoleKey.LeftArrow or ConsoleKey.A:
+            case ConsoleKey.A:
                 coordinates = Left;
                 return true;
-            case ConsoleKey.RightArrow or ConsoleKey.D:
+            case ConsoleKey.D:
                 coordinates = Right;
                 return true;
             default:

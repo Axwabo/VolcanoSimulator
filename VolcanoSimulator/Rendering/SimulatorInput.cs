@@ -42,6 +42,9 @@ public sealed class SimulatorInput
                 _renderer.Session.RegisterEarthquake(volcano.Erupt());
                 _renderer.ShowGui(new SimulationStepGui(_renderer.Layers));
                 return true;
+            case ConsoleKey.Enter when _renderer.SelectedLandmark is City city:
+                _renderer.ShowGui(new PopulateCityGui(city));
+                return true;
             case ConsoleKey.Escape:
                 _renderer.ShowGui(new MenuGui());
                 return true;

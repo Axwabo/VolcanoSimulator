@@ -5,7 +5,7 @@ public sealed class ControlsGui : CenteredBoxGuiBase
 
     private static readonly string[] List =
     [
-        "WASD/↑←↓→: Move",
+        "W/A/S/D: Move",
         "Shift: Fast Move",
         "E: Place shelter",
         "C: place city",

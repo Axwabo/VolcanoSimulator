@@ -6,9 +6,10 @@ public sealed class PlaceCityGui : PlaceLandmarkGuiBase
 {
 
     private const string Title = "Place city";
+    public const int PopulationMaxLength = 8;
 
     private readonly PrefixedInput<InputField> _nameInput = new(new InputField(1, 64), "Name: ");
-    private readonly PrefixedInput<IntInputField> _peopleInput = new(new IntInputField(2, 8), "Citizens: ");
+    private readonly PrefixedInput<IntInputField> _peopleInput = new(new IntInputField(2, PopulationMaxLength), "Citizens: ");
 
     private bool _peopleActive;
 
